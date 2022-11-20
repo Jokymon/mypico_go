@@ -22,6 +22,37 @@ from machine import Pin
 import rp2
 
 
+class Keys:
+    KEY_CH_M  = 69
+    KEY_CH    = 70
+    KEY_CH_P  = 71
+    KEY_PREV  = 68
+    KEY_NEXT  = 64
+    KEY_PLAY  = 67
+    KEY_MINUS =  7
+    KEY_PLUS  = 21
+    KEY_EQ    =  9
+    KEY_0     = 22
+    KEY_100_P = 25
+    KEY_200_P = 13
+    KEY_1     = 12
+    KEY_2     = 24
+    KEY_3     = 94
+    KEY_4     =  8
+    KEY_5     = 28
+    KEY_6     = 90
+    KEY_7     = 66
+    KEY_8     = 82
+    KEY_9     = 74
+
+    NUMBER_KEYS = [KEY_0, KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9]
+
+    def is_number(code):
+        if code in Keys.NUMBER_KEYS:
+            return True
+        return False
+
+
 BURST_LOOP_COUNTER = 30
 BIT_SAMPLE_DELAY = 15
 
