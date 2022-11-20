@@ -9,6 +9,18 @@ def rgb(r, g, b):
 
     return (blue << (5+6)) | (red << 6) | green
 
+
+class Colors:
+    BLACK = rgb(0, 0, 0)
+    WHITE = rgb(255, 255, 255)
+    RED = rgb(255, 0, 0)
+    GREEN = rgb(0, 255, 0)
+    BLUE = rgb(0, 0, 255)
+    YELLOW = rgb(255, 255, 0)
+    CYAN = rgb(0, 255, 255)
+    MAGENTA = rgb(255, 0, 255)
+
+
 class ST7789(framebuf.FrameBuffer):
     def __init__(self):
         self.width = 240
@@ -28,14 +40,6 @@ class ST7789(framebuf.FrameBuffer):
         self.buffer = bytearray(self.height * self.width * 2)
         super().__init__(self.buffer, self.width, self.height, framebuf.RGB565)
         self.init_display()
-        
-        self.WHITE  = 0xFFFF
-        self.BLACK  = 0x0000
-        self.GREEN  = 0x001F
-        self.RED    = 0xF800
-        self.BLUE   = 0xFF00
-        self.GBLUE  = 0X07FF
-        self.YELLOW = 0xFFE0
         
     def write_cmd(self, cmd):
         self.cs(1)
