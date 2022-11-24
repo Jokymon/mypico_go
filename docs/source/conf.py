@@ -6,8 +6,9 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
+import pathlib
 import sys
-sys.path.append("../mybot")
+sys.path.insert(0, (pathlib.Path(__file__).parents[2].resolve() / "mybot").as_posix())
 
 project = 'PicoGo MyBot'
 copyright = '2022, Silvan Wegmann'
@@ -30,3 +31,5 @@ exclude_patterns = []
 
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
+
+autodoc_mock_imports = ["framebuf", "machine", "rp2"]
