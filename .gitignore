@@ -2,3 +2,5 @@
 *.swp
 
 .venv/
+
+docs/build/
