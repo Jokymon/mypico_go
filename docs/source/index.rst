@@ -10,6 +10,7 @@ Welcome to PicoGo MyBot's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   hardware
    modules
 
 Indices and tables
