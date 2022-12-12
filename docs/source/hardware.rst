@@ -45,6 +45,22 @@ PicoGo Hardware
 | Ultrasonic distance echo    | GPIO15   | 20  | 21  | GPIO16   | Motor PWM left  |
 +-----------------------------+----------+-----+-----+----------+-----------------+
 
+Infrared receiver
+-----------------
+
+The PicoGo robot features an IR receiver for remote controlling your robot.
+
+.. image:: images/ir_recv_schema.png
+    :alt: IR receiver schema
+    :width: 49%
+.. image:: images/ir_recv_location.png
+    :alt: IR receiver location on the robot
+    :width: 49%
+
+From the schema and the actual hardware it is unclear what kind of component it is.
+Based on search results, it could however be something like an Everlight IRM-H6XXT
+or an Everlight EAIRMIA1. The top shows an engraving showing "AX14".
+
 Display
 -------
 
