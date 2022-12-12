@@ -61,6 +61,35 @@ From the schema and the actual hardware it is unclear what kind of component it 
 Based on search results, it could however be something like an Everlight IRM-H6XXT
 or an Everlight EAIRMIA1. The top shows an engraving showing "AX14".
 
+Infrared obstacle avoidance
+---------------------------
+
+The PicoGo robot reatures two reflective photointerrupters for detecting obstacles
+in front of the robot.
+
+.. image:: images/ir_obstacle_schema.png
+    :alt: IR obstacle detectors schema
+    :width: 49%
+.. image:: images/ir_obstacle_location.png
+    :alt: IR obstacle detectors on the robot
+    :width: 49%
+
+Obstacles are detected using two Sunlight ST188 reflective photointerrupters. These
+devices deliver a current that changes based on the distance to an obstacle. Using
+a Texas Instruments LM393 differential comparator, this signal is converted into a
+digital signal. This signal indicates whether an object was detected within a certain
+threshold. Once the distance falls below this threshold, the value at the GPIOs 2
+and 3, will change from '1' to '0'. The threshold for this switch can be tuned using
+the two potentiometers at the bottom of the robot. No software is needed for the
+tuning process, as the robot also features two LEDs (marked LEDL and LEDR) that will
+turn on as soon as the distance falls below the threshold.
+
+.. image:: images/ir_obstacle_tuning.png
+    :alt: IR obstacle tuning potentiometers on the robot
+    :width: 49%
+.. image:: images/ir_obstacle_tuning_leds.png
+    :alt: IR obstacle tuning LEDs on the robot
+    :width: 49%
 Display
 -------
 
