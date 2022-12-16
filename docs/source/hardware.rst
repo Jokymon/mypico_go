@@ -79,7 +79,7 @@ devices deliver a current that changes based on the distance to an obstacle. Usi
 a Texas Instruments LM393 differential comparator, this signal is converted into a
 digital signal. This signal indicates whether an object was detected within a certain
 threshold. Once the distance falls below this threshold, the value at the GPIOs 2
-and 3, will change from '1' to '0'. The threshold for this switch can be tuned using
+and 3, will change from ``1`` to ``0``. The threshold for this switch can be tuned using
 the two potentiometers at the bottom of the robot. No software is needed for the
 tuning process, as the robot also features two LEDs (marked LEDL and LEDR) that will
 turn on as soon as the distance falls below the threshold.
@@ -90,6 +90,33 @@ turn on as soon as the distance falls below the threshold.
 .. image:: images/ir_obstacle_tuning_leds.png
     :alt: IR obstacle tuning LEDs on the robot
     :width: 49%
+
+Ultrasonic ranging
+------------------
+
+The PicoGo robot reatures an ultrasonic ranging module.
+
+.. image:: images/ultrasonic_schema.png
+    :alt: Ultrasonic ranging connector schema
+    :width: 49%
+.. image:: images/ultrasonic_location.png
+    :alt: Ultrasonic ranging on the robot
+    :width: 49%
+
+Ultrasonic ranging is done using an HC-SR04 module. This module has two interface
+pins. The trigger pin - called `Trig` in the schema - can be set to ``1`` in order
+to generate an ultrasonic pulse. According to the 
+`Datasheet from Sparkfun <https://cdn.sparkfun.com/datasheets/Sensors/Proximity/HCSR04.pdf>`_
+it is recommended to generate a trigger pulse of at least 10 μs. An ultrasonic
+pulse is generated and reflected off of any obstacles. When there is an echo, the
+`Echo` pin will provide a ``0``-``1``-``0``-pulse whose duration is proportional
+to the distance to the obstacle.
+
+Detailed theorie and tutorials for the HC-SR04 can be found on Adafruit_ and HowMechatronics_.
+
+.. _Adafruit: https://www.adafruit.com/product/3942
+.. _HowMechatronics: https://howtomechatronics.com/tutorials/arduino/ultrasonic-sensor-hc-sr04/
+
 Display
 -------
 
