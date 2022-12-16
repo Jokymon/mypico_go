@@ -1,4 +1,4 @@
-from display import Colors
+from display import Colors, for_lcd
 from ir_remote import Keys
 
 
@@ -37,15 +37,15 @@ class Menu:
             self.entered_code += str(Keys.NUMBER_KEYS.index(code))
 
     def draw(self):
-        self.lcd.fill(Colors.BLACK)
+        self.lcd.fill(for_lcd(*Colors.BLACK))
         for index, entry in enumerate(self.page.entries):
             self.lcd.text(f"{index+1:02} {entry['text']}", 
                     Menu.MARGIN_LEFT, Menu.MARGIN_TOP + index*Menu.LINE_SPACING,
-                    Colors.BLUE)
+                    for_lcd(*Colors.BLUE))
         self.lcd.text("Choose: ",
                     100, Menu.MARGIN_TOP + 10*Menu.LINE_SPACING,
-                    Colors.GREEN)
+                    for_lcd(*Colors.GREEN))
         self.lcd.text(self.entered_code+"_",
                     180, Menu.MARGIN_TOP + 10*Menu.LINE_SPACING,
-                    Colors.RED)
+                    for_lcd(*Colors.RED))
         self.lcd.show()
