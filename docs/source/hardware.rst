@@ -1,6 +1,9 @@
 PicoGo Hardware
 ===============
 
+.. image:: images/picogo_pinout.png
+    :alt: PicoGo pinout diagram
+
 +-----------------------------+----------+-----+-----+----------+-----------------+
 | function                    | pin name | pin | pin | pin name | function        |
 +=============================+==========+=====+=====+==========+=================+
