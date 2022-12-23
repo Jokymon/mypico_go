@@ -2,19 +2,6 @@ from display import Colors, for_lcd
 from ir_remote import Keys
 
 
-def callback1():
-    print("Entry chosen")
-
-
-class MenuPage:
-    entries = [
-        { "text": "Menu Entry Top", "cb": callback1 },
-        { "text": "Another entry", "cb": lambda: None },
-        { "text": "More Entries", "cb": lambda: None },
-        { "text": "Menu Entry Bottom", "cb": lambda: None }
-    ]
-
-
 class Menu:
     MARGIN_TOP = 8
     MARGIN_LEFT = 10
@@ -22,12 +9,15 @@ class Menu:
 
     LINES = 12
 
-    def __init__(self, lcd, ir, page):
+    def __init__(self, lcd, ir):
         self.lcd = lcd
         self.ir = ir
-        self.page = page
+        self.page = None
 
         self.entered_code = ""
+
+    def set_menu_page(self, page):
+        self.page = page
 
     def process(self):
         if not self.ir.key_available():
@@ -35,6 +25,11 @@ class Menu:
         code = self.ir.get_key()
         if Keys.is_number(code):
             self.entered_code += str(Keys.NUMBER_KEYS.index(code))
+        if len(self.entered_code)==2:
+            selection = int(self.entered_code)
+            self.entered_code = ""
+            if selection>=1 and selection<=len(self.page.entries):
+                return self.page.entries[selection-1]["cb"]()
 
     def draw(self):
         self.lcd.fill(for_lcd(*Colors.BLACK))
@@ -48,4 +43,5 @@ class Menu:
         self.lcd.text(self.entered_code+"_",
                     180, Menu.MARGIN_TOP + 10*Menu.LINE_SPACING,
                     for_lcd(*Colors.RED))
+        self.page.draw(self.lcd)
         self.lcd.show()
