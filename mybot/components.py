@@ -1,4 +1,5 @@
 from machine import ADC, PWM, Pin
+import time
 
 
 class Drive(object):
@@ -99,3 +100,13 @@ class System:
         if percentage < 0: percentage = 0
         if percentage > 100: percentage = 100
         return percentage
+
+
+class Buzzer:
+    def __init__(self):
+        self.BUZZER = Pin(4, Pin.OUT)
+
+    def beep(self, time_ms=150):
+        self.BUZZER.value(1)
+        time.sleep_ms(time_ms)
+        self.BUZZER.value(0)
