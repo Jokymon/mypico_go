@@ -29,22 +29,23 @@ class ST7789(framebuf.FrameBuffer):
     def __init__(self):
         self.width = 240
         self.height = 135
-        
+
         self.rst = Pin(12, Pin.OUT)
         self.bl = Pin(13, Pin.OUT)
         self.bl(1)
-        
+
         self.cs = Pin(9, Pin.OUT)
         self.cs(1)
         self.spi = SPI(1)
         self.spi = SPI(1, 1000_000)
-        self.spi = SPI(1, 10000_000, polarity=0, phase=0, sck=Pin(10), mosi=Pin(11), miso=None)
-        self.dc = Pin(8,Pin.OUT)
+        self.spi = SPI(1, 10000_000, polarity=0, phase=0,
+                       sck=Pin(10), mosi=Pin(11), miso=None)
+        self.dc = Pin(8, Pin.OUT)
         self.dc(1)
         self.buffer = bytearray(self.height * self.width * 2)
         super().__init__(self.buffer, self.width, self.height, framebuf.RGB565)
         self.init_display()
-        
+
     def write_cmd(self, cmd):
         self.cs(1)
         self.dc(0)
@@ -64,7 +65,7 @@ class ST7789(framebuf.FrameBuffer):
         self.rst(1)
         self.rst(0)
         self.rst(1)
-        
+
         self.write_cmd(0x36)
         self.write_data(0x70)
 
@@ -135,9 +136,9 @@ class ST7789(framebuf.FrameBuffer):
         self.write_data(0x1F)
         self.write_data(0x20)
         self.write_data(0x23)
-        
+
         self.write_cmd(0x21)    # configure display inversion
-        #self.write_cmd(0x20)    # disable display inversion
+        # self.write_cmd(0x20)    # disable display inversion
 
         self.write_cmd(0x11)
 
@@ -149,15 +150,15 @@ class ST7789(framebuf.FrameBuffer):
         self.write_data(0x28)
         self.write_data(0x01)
         self.write_data(0x17)
-        
+
         self.write_cmd(0x2B)
         self.write_data(0x00)
         self.write_data(0x35)
         self.write_data(0x00)
         self.write_data(0xBB)
-        
+
         self.write_cmd(0x2C)
-        
+
         self.cs(1)
         self.dc(1)
         self.cs(0)
@@ -165,7 +166,8 @@ class ST7789(framebuf.FrameBuffer):
         self.cs(1)
 
 
-@rp2.asm_pio(sideset_init=rp2.PIO.OUT_LOW, out_shiftdir=rp2.PIO.SHIFT_LEFT, autopull=True, pull_thresh=24)
+@rp2.asm_pio(sideset_init=rp2.PIO.OUT_LOW, out_shiftdir=rp2.PIO.SHIFT_LEFT,
+             autopull=True, pull_thresh=24)
 def ws2812():
     T1 = 2
     T2 = 5
@@ -178,7 +180,7 @@ def ws2812():
     label("do_zero")
     nop()                   .side(0)    [T2 - 1]
     wrap()
-        
+
 
 class NeoPixel:
     PIN_NUM = 22
@@ -188,19 +190,21 @@ class NeoPixel:
         self.out = Pin(22, Pin.OUT)
         self.brightness = 0.8
 
-        self.sm = rp2.StateMachine(0, ws2812, freq=8_000_000, sideset_base=Pin(self.PIN_NUM))
+        self.sm = rp2.StateMachine(0, ws2812, freq=8_000_000,
+                                   sideset_base=Pin(self.PIN_NUM))
         self.sm.active(1)
 
         self.pixel_array = array.array("I", [0 for _ in range(self.NUM_LEDS)])
 
     def set_color(self, led_index, color):
-        self.pixel_array[led_index] = (color[1]<<16) + (color[0]<<8) + color[2]
+        self.pixel_array[led_index] = \
+            (color[1] << 16) + (color[0] << 8) + color[2]
 
     def show(self):
         dimmer_ar = array.array("I", [0 for _ in range(self.NUM_LEDS)])
-        for i,c in enumerate(self.pixel_array):
+        for i, c in enumerate(self.pixel_array):
             r = int(((c >> 8) & 0xFF) * self.brightness)
             g = int(((c >> 16) & 0xFF) * self.brightness)
             b = int((c & 0xFF) * self.brightness)
-            dimmer_ar[i] = (g<<16) + (r<<8) + b
+            dimmer_ar[i] = (g << 16) + (r << 8) + b
         self.sm.put(dimmer_ar, 8)
