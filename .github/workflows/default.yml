@@ -23,7 +23,7 @@ jobs:
     - name: Commit documentation changes to publish to gh-pages
       run: |
         git clone https://github.com/Jokymon/mypico_go.git --branch gh-pages --single-branch gh-pages
-        cp -r docs/_build/html/* gh-pages/
+        cp -r docs/_build/* gh-pages/
         cd gh-pages
         touch .nojekyll
         git config --local user.email "action@github.com"
