@@ -18,6 +18,7 @@ jobs:
       with:
         pre-build-command: "apt-get update -y && apt-get install -y plantuml && export PLANTUML=plantuml"
         docs-folder: "docs/"
+        build-command: "sphinx-build -b html source _build"
 
     - name: Commit documentation changes to publish to gh-pages
       run: |
