@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ir_remote &mdash; PicoGo MyBot 0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> PicoGo MyBot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../hardware.html">PicoGo Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">mybot</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PicoGo MyBot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Module code</a> &raquo;</li>
+      <li>ir_remote</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ir_remote</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This code is ported from https://github.com/raspberrypi/pico-examples/blob/master/pio/ir_nec/nec_receive_library/nec_receive.pio</span>
+
+<span class="sd">Decode IR frames in NEC format and push 32-bit words to the input FIFO.</span>
+
+<span class="sd">The input pin should be connected to an IR detector with an &#39;active low&#39;</span>
+<span class="sd">output.</span>
+
+<span class="sd">This program expects there to be 10 state machine clock ticks per &#39;normal&#39;</span>
+<span class="sd">562.5us burst period in order to permit timely detection of start of a burst.</span>
+<span class="sd">The initailisation function below sets the correct divisor to achive this</span>
+<span class="sd">relative to the system clock.</span>
+
+<span class="sd">Within the &#39;NEC&#39; protocol frames consists of 32 bits sent least-siginificant</span>
+<span class="sd">bit first; so the Input Shift Register should be configured to shift right</span>
+<span class="sd">and autopush after 32 bits, as in the initialisation function below.</span>
+
+<span class="sd">IR codes can be extracted from the sm RX fifo. Values might look like this:</span>
+<span class="sd">0xa15eff00</span>
+
+<span class="sd">The first byte 0xa1 is the inverse of the following code 0x5e and 0xff, the</span>
+<span class="sd">inverse of 0x00 is a form of control code. The second byte, here 0x5e,</span>
+<span class="sd">represents the received key code.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">machine</span> <span class="kn">import</span> <span class="n">Pin</span>
+<span class="kn">import</span> <span class="nn">rp2</span>
+
+
+<div class="viewcode-block" id="Keys"><a class="viewcode-back" href="../ir_remote.html#ir_remote.Keys">[docs]</a><span class="k">class</span> <span class="nc">Keys</span><span class="p">:</span>
+    <span class="n">KEY_CH_M</span> <span class="o">=</span> <span class="mi">69</span>
+    <span class="n">KEY_CH</span> <span class="o">=</span> <span class="mi">70</span>
+    <span class="n">KEY_CH_P</span> <span class="o">=</span> <span class="mi">71</span>
+    <span class="n">KEY_PREV</span> <span class="o">=</span> <span class="mi">68</span>
+    <span class="n">KEY_NEXT</span> <span class="o">=</span> <span class="mi">64</span>
+    <span class="n">KEY_PLAY</span> <span class="o">=</span> <span class="mi">67</span>
+    <span class="n">KEY_MINUS</span> <span class="o">=</span> <span class="mi">7</span>
+    <span class="n">KEY_PLUS</span> <span class="o">=</span> <span class="mi">21</span>
+    <span class="n">KEY_EQ</span> <span class="o">=</span> <span class="mi">9</span>
+    <span class="n">KEY_0</span> <span class="o">=</span> <span class="mi">22</span>
+    <span class="n">KEY_100_P</span> <span class="o">=</span> <span class="mi">25</span>
+    <span class="n">KEY_200_P</span> <span class="o">=</span> <span class="mi">13</span>
+    <span class="n">KEY_1</span> <span class="o">=</span> <span class="mi">12</span>
+    <span class="n">KEY_2</span> <span class="o">=</span> <span class="mi">24</span>
+    <span class="n">KEY_3</span> <span class="o">=</span> <span class="mi">94</span>
+    <span class="n">KEY_4</span> <span class="o">=</span> <span class="mi">8</span>
+    <span class="n">KEY_5</span> <span class="o">=</span> <span class="mi">28</span>
+    <span class="n">KEY_6</span> <span class="o">=</span> <span class="mi">90</span>
+    <span class="n">KEY_7</span> <span class="o">=</span> <span class="mi">66</span>
+    <span class="n">KEY_8</span> <span class="o">=</span> <span class="mi">82</span>
+    <span class="n">KEY_9</span> <span class="o">=</span> <span class="mi">74</span>
+
+    <span class="n">NUMBER_KEYS</span> <span class="o">=</span> <span class="p">[</span><span class="n">KEY_0</span><span class="p">,</span> <span class="n">KEY_1</span><span class="p">,</span> <span class="n">KEY_2</span><span class="p">,</span> <span class="n">KEY_3</span><span class="p">,</span> <span class="n">KEY_4</span><span class="p">,</span> <span class="n">KEY_5</span><span class="p">,</span> <span class="n">KEY_6</span><span class="p">,</span> <span class="n">KEY_7</span><span class="p">,</span>
+                   <span class="n">KEY_8</span><span class="p">,</span> <span class="n">KEY_9</span><span class="p">]</span>
+
+<div class="viewcode-block" id="Keys.is_number"><a class="viewcode-back" href="../ir_remote.html#ir_remote.Keys.is_number">[docs]</a>    <span class="k">def</span> <span class="nf">is_number</span><span class="p">(</span><span class="n">code</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">code</span> <span class="ow">in</span> <span class="n">Keys</span><span class="o">.</span><span class="n">NUMBER_KEYS</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span></div></div>
+
+
+<span class="n">BURST_LOOP_COUNTER</span> <span class="o">=</span> <span class="mi">30</span>
+<span class="n">BIT_SAMPLE_DELAY</span> <span class="o">=</span> <span class="mi">15</span>
+
+
+<div class="viewcode-block" id="IRreceiver"><a class="viewcode-back" href="../ir_remote.html#ir_remote.IRreceiver">[docs]</a><span class="k">class</span> <span class="nc">IRreceiver</span><span class="p">:</span>
+<div class="viewcode-block" id="IRreceiver.ir_receive"><a class="viewcode-back" href="../ir_remote.html#ir_remote.IRreceiver.ir_receive">[docs]</a>    <span class="nd">@rp2</span><span class="o">.</span><span class="n">asm_pio</span><span class="p">(</span><span class="n">in_shiftdir</span><span class="o">=</span><span class="n">rp2</span><span class="o">.</span><span class="n">PIO</span><span class="o">.</span><span class="n">SHIFT_RIGHT</span><span class="p">,</span> <span class="n">autopush</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                 <span class="n">push_thresh</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">ir_receive</span><span class="p">(</span><span class="n">BURST_LOOP_COUNTER</span><span class="o">=</span><span class="n">BURST_LOOP_COUNTER</span><span class="p">,</span>
+                   <span class="n">BIT_SAMPLE_DELAY</span><span class="o">=</span><span class="n">BIT_SAMPLE_DELAY</span><span class="p">):</span>
+        <span class="n">wrap_target</span><span class="p">()</span>
+
+        <span class="n">label</span><span class="p">(</span><span class="s2">&quot;next_burst&quot;</span><span class="p">)</span>
+        <span class="nb">set</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">BURST_LOOP_COUNTER</span><span class="p">)</span>
+        <span class="n">wait</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">pin</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>                     <span class="c1"># wait for the next burst to start</span>
+
+        <span class="n">label</span><span class="p">(</span><span class="s2">&quot;burst_loop&quot;</span><span class="p">)</span>
+        <span class="n">jmp</span><span class="p">(</span><span class="n">pin</span><span class="p">,</span> <span class="s2">&quot;data_bit&quot;</span><span class="p">)</span>                <span class="c1"># the burst ended before the counter expired</span>
+        <span class="n">jmp</span><span class="p">(</span><span class="n">x_dec</span><span class="p">,</span> <span class="s2">&quot;burst_loop&quot;</span><span class="p">)</span>            <span class="c1"># wait for the burst to end</span>
+
+                                            <span class="c1"># the counter expired - this is a sync burst</span>
+        <span class="n">mov</span><span class="p">(</span><span class="n">isr</span><span class="p">,</span> <span class="n">null</span><span class="p">)</span>                      <span class="c1"># reset the Input Shift Register</span>
+        <span class="n">wait</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">pin</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>                     <span class="c1"># wait for the sync burst to finish</span>
+        <span class="n">jmp</span><span class="p">(</span><span class="s2">&quot;next_burst&quot;</span><span class="p">)</span>                   <span class="c1"># wait for the first data bit</span>
+
+        <span class="n">label</span><span class="p">(</span><span class="s2">&quot;data_bit&quot;</span><span class="p">)</span>
+        <span class="n">nop</span><span class="p">()[</span><span class="n">BIT_SAMPLE_DELAY</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>         <span class="c1"># wait for 1.5 burst periods before sampling the bit value</span>
+        <span class="n">in_</span><span class="p">(</span><span class="n">pins</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>                        <span class="c1"># if the next burst has started then detect a &#39;0&#39; (short gap)</span>
+                                            <span class="c1"># otherwise detect a &#39;1&#39; (long gap)</span>
+                                            <span class="c1"># after 32 bits the ISR will autop</span>
+
+        <span class="n">wrap</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">ir</span> <span class="o">=</span> <span class="n">Pin</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">Pin</span><span class="o">.</span><span class="n">IN</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">sm</span> <span class="o">=</span> <span class="n">rp2</span><span class="o">.</span><span class="n">StateMachine</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">IRreceiver</span><span class="o">.</span><span class="n">ir_receive</span><span class="p">,</span>
+                                   <span class="n">freq</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="mf">10.0</span> <span class="o">/</span> <span class="mf">562.5e-6</span><span class="p">),</span> <span class="n">in_base</span><span class="o">=</span><span class="n">ir</span><span class="p">,</span>
+                                   <span class="n">jmp_pin</span><span class="o">=</span><span class="n">ir</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sm</span><span class="o">.</span><span class="n">active</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<div class="viewcode-block" id="IRreceiver.key_available"><a class="viewcode-back" href="../ir_remote.html#ir_remote.IRreceiver.key_available">[docs]</a>    <span class="k">def</span> <span class="nf">key_available</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sm</span><span class="o">.</span><span class="n">rx_fifo</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span></div>
+
+<div class="viewcode-block" id="IRreceiver.get_key"><a class="viewcode-back" href="../ir_remote.html#ir_remote.IRreceiver.get_key">[docs]</a>    <span class="k">def</span> <span class="nf">get_key</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sm</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">data</span> <span class="o">&amp;</span> <span class="mh">0x00ff0000</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">16</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Silvan Wegmann.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

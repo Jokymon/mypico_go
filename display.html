@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>display module &mdash; PicoGo MyBot 0.1 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="ir_remote module" href="ir_remote.html" />
+    <link rel="prev" title="components module" href="components.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> PicoGo MyBot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="hardware.html">PicoGo Hardware</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">mybot</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="components.html">components module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">display module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ir_remote.html">ir_remote module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="menu.html">menu module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mybot.html">mybot module</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PicoGo MyBot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="modules.html">mybot</a> &raquo;</li>
+      <li>display module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/display.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="module-display">
+<span id="display-module"></span><h1>display module<a class="headerlink" href="#module-display" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="display.Colors">
+<em class="property">class </em><code class="sig-prename descclassname">display.</code><code class="sig-name descname">Colors</code><a class="reference internal" href="_modules/display.html#Colors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#display.Colors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="attribute">
+<dt id="display.Colors.BLACK">
+<code class="sig-name descname">BLACK</code><em class="property"> = (0, 0, 0)</em><a class="headerlink" href="#display.Colors.BLACK" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="display.Colors.BLUE">
+<code class="sig-name descname">BLUE</code><em class="property"> = (0, 0, 255)</em><a class="headerlink" href="#display.Colors.BLUE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="display.Colors.CYAN">
+<code class="sig-name descname">CYAN</code><em class="property"> = (0, 255, 255)</em><a class="headerlink" href="#display.Colors.CYAN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="display.Colors.GREEN">
+<code class="sig-name descname">GREEN</code><em class="property"> = (0, 255, 0)</em><a class="headerlink" href="#display.Colors.GREEN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="display.Colors.MAGENTA">
+<code class="sig-name descname">MAGENTA</code><em class="property"> = (255, 0, 255)</em><a class="headerlink" href="#display.Colors.MAGENTA" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="display.Colors.PURPLE">
+<code class="sig-name descname">PURPLE</code><em class="property"> = (180, 0, 255)</em><a class="headerlink" href="#display.Colors.PURPLE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="display.Colors.RED">
+<code class="sig-name descname">RED</code><em class="property"> = (255, 0, 0)</em><a class="headerlink" href="#display.Colors.RED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="display.Colors.WHITE">
+<code class="sig-name descname">WHITE</code><em class="property"> = (255, 255, 255)</em><a class="headerlink" href="#display.Colors.WHITE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="display.Colors.YELLOW">
+<code class="sig-name descname">YELLOW</code><em class="property"> = (255, 255, 0)</em><a class="headerlink" href="#display.Colors.YELLOW" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="display.NeoPixel">
+<em class="property">class </em><code class="sig-prename descclassname">display.</code><code class="sig-name descname">NeoPixel</code><a class="reference internal" href="_modules/display.html#NeoPixel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#display.NeoPixel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="attribute">
+<dt id="display.NeoPixel.NUM_LEDS">
+<code class="sig-name descname">NUM_LEDS</code><em class="property"> = 4</em><a class="headerlink" href="#display.NeoPixel.NUM_LEDS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="display.NeoPixel.PIN_NUM">
+<code class="sig-name descname">PIN_NUM</code><em class="property"> = 22</em><a class="headerlink" href="#display.NeoPixel.PIN_NUM" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="display.NeoPixel.set_color">
+<code class="sig-name descname">set_color</code><span class="sig-paren">(</span><em class="sig-param">led_index</em>, <em class="sig-param">color</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/display.html#NeoPixel.set_color"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#display.NeoPixel.set_color" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="display.NeoPixel.show">
+<code class="sig-name descname">show</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/display.html#NeoPixel.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#display.NeoPixel.show" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="display.ST7789">
+<em class="property">class </em><code class="sig-prename descclassname">display.</code><code class="sig-name descname">ST7789</code><a class="reference internal" href="_modules/display.html#ST7789"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#display.ST7789" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">framebuf.FrameBuffer</span></code></p>
+<dl class="method">
+<dt id="display.ST7789.init_display">
+<code class="sig-name descname">init_display</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/display.html#ST7789.init_display"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#display.ST7789.init_display" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize dispaly</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="display.ST7789.show">
+<code class="sig-name descname">show</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/display.html#ST7789.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#display.ST7789.show" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="display.ST7789.write_cmd">
+<code class="sig-name descname">write_cmd</code><span class="sig-paren">(</span><em class="sig-param">cmd</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/display.html#ST7789.write_cmd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#display.ST7789.write_cmd" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="display.ST7789.write_data">
+<code class="sig-name descname">write_data</code><span class="sig-paren">(</span><em class="sig-param">buf</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/display.html#ST7789.write_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#display.ST7789.write_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="display.for_lcd">
+<code class="sig-prename descclassname">display.</code><code class="sig-name descname">for_lcd</code><span class="sig-paren">(</span><em class="sig-param">r</em>, <em class="sig-param">g</em>, <em class="sig-param">b</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/display.html#for_lcd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#display.for_lcd" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="display.ws2812">
+<code class="sig-prename descclassname">display.</code><code class="sig-name descname">ws2812</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/display.html#ws2812"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#display.ws2812" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="components.html" class="btn btn-neutral float-left" title="components module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ir_remote.html" class="btn btn-neutral float-right" title="ir_remote module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Silvan Wegmann.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

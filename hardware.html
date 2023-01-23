@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PicoGo Hardware &mdash; PicoGo MyBot 0.1 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="mybot" href="modules.html" />
+    <link rel="prev" title="Welcome to PicoGo MyBot’s documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> PicoGo MyBot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">PicoGo Hardware</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#infrared-receiver">Infrared receiver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#infrared-obstacle-avoidance">Infrared obstacle avoidance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ultrasonic-ranging">Ultrasonic ranging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#display">Display</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">mybot</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PicoGo MyBot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>PicoGo Hardware</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/hardware.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="picogo-hardware">
+<h1>PicoGo Hardware<a class="headerlink" href="#picogo-hardware" title="Permalink to this headline">¶</a></h1>
+<img alt="PicoGo pinout diagram" src="_images/picogo_pinout.png" />
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 13%" />
+<col style="width: 7%" />
+<col style="width: 7%" />
+<col style="width: 13%" />
+<col style="width: 22%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>function</p></th>
+<th class="head"><p>pin name</p></th>
+<th class="head"><p>pin</p></th>
+<th class="head"><p>pin</p></th>
+<th class="head"><p>pin name</p></th>
+<th class="head"><p>function</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Bluetooth RX</p></td>
+<td><p>GPIO0</p></td>
+<td><p>1</p></td>
+<td><p>40</p></td>
+<td><p>VBUS</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Bluetooth TX</p></td>
+<td><p>GPIO1</p></td>
+<td><p>2</p></td>
+<td><p>39</p></td>
+<td><p>VSYS</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>GND</p></td>
+<td><p>3</p></td>
+<td><p>38</p></td>
+<td><p>GND</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>IR obstacle right</p></td>
+<td><p>GPIO2</p></td>
+<td><p>4</p></td>
+<td><p>37</p></td>
+<td><p>3V3_EN</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>IR obstacle left</p></td>
+<td><p>GPIO3</p></td>
+<td><p>5</p></td>
+<td><p>36</p></td>
+<td><p>3V3(OUT)</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Buzzer</p></td>
+<td><p>GPIO4</p></td>
+<td><p>6</p></td>
+<td><p>35</p></td>
+<td><p>ADC_VREF</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>IR receiver</p></td>
+<td><p>GPIO5</p></td>
+<td><p>7</p></td>
+<td><p>34</p></td>
+<td><p>ADC2</p></td>
+<td><p>Tracking sensor</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>GND</p></td>
+<td><p>8</p></td>
+<td><p>33</p></td>
+<td><p>GND</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>I2C SDA</p></td>
+<td><p>GPIO6</p></td>
+<td><p>9</p></td>
+<td><p>32</p></td>
+<td><p>ADC1</p></td>
+<td><p>Tracking sensor</p></td>
+</tr>
+<tr class="row-odd"><td><p>I2C SCL</p></td>
+<td><p>GPIO7</p></td>
+<td><p>10</p></td>
+<td><p>31</p></td>
+<td><p>ADC0</p></td>
+<td><p>Battery voltage</p></td>
+</tr>
+<tr class="row-even"><td><p>LCD SPI RX</p></td>
+<td><p>GPIO8</p></td>
+<td><p>11</p></td>
+<td><p>30</p></td>
+<td><p>RUN</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>LCD SPI CS</p></td>
+<td><p>GPIO9</p></td>
+<td><p>12</p></td>
+<td><p>29</p></td>
+<td><p>GPIO22</p></td>
+<td><p>Neopixel</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>GND</p></td>
+<td><p>13</p></td>
+<td><p>28</p></td>
+<td><p>GND</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>LCD SPI SCK</p></td>
+<td><p>GPIO10</p></td>
+<td><p>14</p></td>
+<td><p>27</p></td>
+<td><p>GPIO21</p></td>
+<td><p>Motor PWM right</p></td>
+</tr>
+<tr class="row-even"><td><p>LCD SPI TX</p></td>
+<td><p>GPIO11</p></td>
+<td><p>15</p></td>
+<td><p>26</p></td>
+<td><p>GPIO20</p></td>
+<td><p>Motor IN2 right</p></td>
+</tr>
+<tr class="row-odd"><td><p>LCD Reset</p></td>
+<td><p>GPIO12</p></td>
+<td><p>16</p></td>
+<td><p>25</p></td>
+<td><p>GPIO19</p></td>
+<td><p>Motor IN1 right</p></td>
+</tr>
+<tr class="row-even"><td><p>LCD Backlight</p></td>
+<td><p>GPIO13</p></td>
+<td><p>17</p></td>
+<td><p>24</p></td>
+<td><p>GPIO18</p></td>
+<td><p>Motor IN1 left</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>GND</p></td>
+<td><p>18</p></td>
+<td><p>23</p></td>
+<td><p>GND</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Ultrasonic distance trigger</p></td>
+<td><p>GPIO14</p></td>
+<td><p>19</p></td>
+<td><p>22</p></td>
+<td><p>GPIO17</p></td>
+<td><p>Motor IN2 left</p></td>
+</tr>
+<tr class="row-odd"><td><p>Ultrasonic distance echo</p></td>
+<td><p>GPIO15</p></td>
+<td><p>20</p></td>
+<td><p>21</p></td>
+<td><p>GPIO16</p></td>
+<td><p>Motor PWM left</p></td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="infrared-receiver">
+<h2>Infrared receiver<a class="headerlink" href="#infrared-receiver" title="Permalink to this headline">¶</a></h2>
+<p>The PicoGo robot features an IR receiver for remote controlling your robot.</p>
+<a class="reference internal image-reference" href="_images/ir_recv_schema.png"><img alt="IR receiver schema" src="_images/ir_recv_schema.png" style="width: 49%;" /></a>
+<a class="reference internal image-reference" href="_images/ir_recv_location.png"><img alt="IR receiver location on the robot" src="_images/ir_recv_location.png" style="width: 49%;" /></a>
+<p>From the schema and the actual hardware it is unclear what kind of component it is.
+Based on search results, it could however be something like an Everlight IRM-H6XXT
+or an Everlight EAIRMIA1. The top shows an engraving showing “AX14”.</p>
+</div>
+<div class="section" id="infrared-obstacle-avoidance">
+<h2>Infrared obstacle avoidance<a class="headerlink" href="#infrared-obstacle-avoidance" title="Permalink to this headline">¶</a></h2>
+<p>The PicoGo robot reatures two reflective photointerrupters for detecting obstacles
+in front of the robot.</p>
+<a class="reference internal image-reference" href="_images/ir_obstacle_schema.png"><img alt="IR obstacle detectors schema" src="_images/ir_obstacle_schema.png" style="width: 49%;" /></a>
+<a class="reference internal image-reference" href="_images/ir_obstacle_location.png"><img alt="IR obstacle detectors on the robot" src="_images/ir_obstacle_location.png" style="width: 49%;" /></a>
+<p>Obstacles are detected using two Sunlight ST188 reflective photointerrupters. These
+devices deliver a current that changes based on the distance to an obstacle. Using
+a Texas Instruments LM393 differential comparator, this signal is converted into a
+digital signal. This signal indicates whether an object was detected within a certain
+threshold. Once the distance falls below this threshold, the value at the GPIOs 2
+and 3, will change from <code class="docutils literal notranslate"><span class="pre">1</span></code> to <code class="docutils literal notranslate"><span class="pre">0</span></code>. The threshold for this switch can be tuned using
+the two potentiometers at the bottom of the robot. No software is needed for the
+tuning process, as the robot also features two LEDs (marked LEDL and LEDR) that will
+turn on as soon as the distance falls below the threshold.</p>
+<a class="reference internal image-reference" href="_images/ir_obstacle_tuning.png"><img alt="IR obstacle tuning potentiometers on the robot" src="_images/ir_obstacle_tuning.png" style="width: 49%;" /></a>
+<a class="reference internal image-reference" href="_images/ir_obstacle_tuning_leds.png"><img alt="IR obstacle tuning LEDs on the robot" src="_images/ir_obstacle_tuning_leds.png" style="width: 49%;" /></a>
+</div>
+<div class="section" id="ultrasonic-ranging">
+<h2>Ultrasonic ranging<a class="headerlink" href="#ultrasonic-ranging" title="Permalink to this headline">¶</a></h2>
+<p>The PicoGo robot reatures an ultrasonic ranging module.</p>
+<a class="reference internal image-reference" href="_images/ultrasonic_schema.png"><img alt="Ultrasonic ranging connector schema" src="_images/ultrasonic_schema.png" style="width: 49%;" /></a>
+<a class="reference internal image-reference" href="_images/ultrasonic_location.png"><img alt="Ultrasonic ranging on the robot" src="_images/ultrasonic_location.png" style="width: 49%;" /></a>
+<p>Ultrasonic ranging is done using an HC-SR04 module. This module has two interface
+pins. The trigger pin - called <cite>Trig</cite> in the schema - can be set to <code class="docutils literal notranslate"><span class="pre">1</span></code> in order
+to generate an ultrasonic pulse. According to the
+<a class="reference external" href="https://cdn.sparkfun.com/datasheets/Sensors/Proximity/HCSR04.pdf">Datasheet from Sparkfun</a>
+it is recommended to generate a trigger pulse of at least 10 μs. An ultrasonic
+pulse is generated and reflected off of any obstacles. When there is an echo, the
+<cite>Echo</cite> pin will provide a <code class="docutils literal notranslate"><span class="pre">0</span></code>-<code class="docutils literal notranslate"><span class="pre">1</span></code>-<code class="docutils literal notranslate"><span class="pre">0</span></code>-pulse whose duration is proportional
+to the distance to the obstacle.</p>
+<p>Detailed theorie and tutorials for the HC-SR04 can be found on <a class="reference external" href="https://www.adafruit.com/product/3942">Adafruit</a> and <a class="reference external" href="https://howtomechatronics.com/tutorials/arduino/ultrasonic-sensor-hc-sr04/">HowMechatronics</a>.</p>
+</div>
+<div class="section" id="display">
+<h2>Display<a class="headerlink" href="#display" title="Permalink to this headline">¶</a></h2>
+<p>The display has a resolution of 240 x 135 pixel. Every pixel is represented by a 16-bit 5-6-5 RGB value</p>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to PicoGo MyBot’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="modules.html" class="btn btn-neutral float-right" title="mybot" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Silvan Wegmann.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
