@@ -1,0 +1,4 @@
+# Requirements only used for Sphinx-Building
+sphinx-rtd-theme==1.0.0
+sphinxcontrib-plantuml==0.24
+sphinxcontrib-wavedrom==3.0.4
