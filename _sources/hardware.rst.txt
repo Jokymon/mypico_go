@@ -172,4 +172,16 @@ scaled up for this purpose.
 Display
 -------
 
-The display has a resolution of 240 x 135 pixel. Every pixel is represented by a 16-bit 5-6-5 RGB value
+The PicoGo robot features a 1.14'' LCD for displaying status information or an entire
+user interface.
+
+.. image:: images/lcd_schema.png
+    :alt: LCD schema
+    :width: 49%
+.. image:: images/lcd_location.png
+    :alt: LCD location on the robot
+    :width: 49%
+
+The display is a WaveShare module with an LCD of a resolution of 240 x 135 pixel. 
+It's connected to the RP2040 via the SPI bus. The display controller itself is a
+Sitronix ST7789 TFT-LCD driver. Every pixel is represented by a 16-bit 5-6-5 RGB value.
