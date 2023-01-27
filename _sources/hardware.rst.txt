@@ -97,7 +97,7 @@ turn on as soon as the distance falls below the threshold.
 Ultrasonic ranging
 ------------------
 
-The PicoGo robot reatures an ultrasonic ranging module.
+The PicoGo robot features an ultrasonic ranging module.
 
 .. image:: images/ultrasonic_schema.png
     :alt: Ultrasonic ranging connector schema
@@ -115,10 +115,59 @@ pulse is generated and reflected off of any obstacles. When there is an echo, th
 `Echo` pin will provide a ``0``-``1``-``0``-pulse whose duration is proportional
 to the distance to the obstacle.
 
-Detailed theorie and tutorials for the HC-SR04 can be found on Adafruit_ and HowMechatronics_.
+Detailed theory and tutorials for the HC-SR04 can be found on Adafruit_ and HowMechatronics_.
 
 .. _Adafruit: https://www.adafruit.com/product/3942
 .. _HowMechatronics: https://howtomechatronics.com/tutorials/arduino/ultrasonic-sensor-hc-sr04/
+
+IR line tracking
+----------------
+
+The PicoGo robot features 5 infrared line following sensors.
+
+.. image:: images/ir_tracking_schema.png
+    :alt: IR tracking sensor schema
+.. image:: images/ir_tracking_location.png
+    :alt: IR tracking sensors on the robot
+    :width: 49%
+
+To detect the brightness of the surface beneath the robot, 5 Everlight ITR20001/T opto
+interruptors are used. These are connected to 2 different AD-converters.
+
+The sensors on the far left and far right of the robot are directly connected to an ADC input
+of the RP2040. ADC1 (Pin32) and ADC2 (Pin34) are used for this purpose. The 3 sensors in the
+middle are connected to the ADS1015 external AD-converter that is then connected to the RP2040
+over I2C.
+
+When reading the ADC-values from the corresponding converters, be aware of the different
+value ranges. Both AD-converters have a resolution of 12-bit. However due to different
+interfaces and software libraries, the read values have a different range. The below tables
+show the ranges for an ADS1015 configuration with a "programmable gain amplifier (PGA)"
+setting of +/-4.096V and the ADC MicroPython module.
+
+For values from the ADS1015, the following data is relevant:
+
++-------------------------------------+-------+
+| Maximum possible input voltage [V]  | 4.096 |
++-------------------------------------+-------+
+| Digital input value for max voltage | 2048  |
++-------------------------------------+-------+
+| Digital input value for 3.3V input  | 1650  |
++-------------------------------------+-------+
+
+For values from the RP2040, the following data is relevant:
+
++-------------------------------------------------------+-------+
+| Maximum possible input voltage [V]                    | 3.3   |
++-------------------------------------------------------+-------+
+| Digital input value for max voltage                   | 4096  |
++-------------------------------------------------------+-------+
+| Value reported by MicroPython library for max voltage | 65536 |
++-------------------------------------------------------+-------+
+
+As you can see, the MicroPython library provides a normalized 16-bit reading
+from the ADC, even though the RP2040 only has a 12-bit ADC. The provided value is
+scaled up for this purpose.
 
 Display
 -------

@@ -41,6 +41,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#infrared-receiver">Infrared receiver</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#infrared-obstacle-avoidance">Infrared obstacle avoidance</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ultrasonic-ranging">Ultrasonic ranging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ir-line-tracking">IR line tracking</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#display">Display</a></li>
 </ul>
 </li>
@@ -264,7 +265,7 @@ turn on as soon as the distance falls below the threshold.</p>
 </div>
 <div class="section" id="ultrasonic-ranging">
 <h2>Ultrasonic ranging<a class="headerlink" href="#ultrasonic-ranging" title="Permalink to this headline">¶</a></h2>
-<p>The PicoGo robot reatures an ultrasonic ranging module.</p>
+<p>The PicoGo robot features an ultrasonic ranging module.</p>
 <a class="reference internal image-reference" href="_images/ultrasonic_schema.png"><img alt="Ultrasonic ranging connector schema" src="_images/ultrasonic_schema.png" style="width: 49%;" /></a>
 <a class="reference internal image-reference" href="_images/ultrasonic_location.png"><img alt="Ultrasonic ranging on the robot" src="_images/ultrasonic_location.png" style="width: 49%;" /></a>
 <p>Ultrasonic ranging is done using an HC-SR04 module. This module has two interface
@@ -275,7 +276,63 @@ it is recommended to generate a trigger pulse of at least 10 μs. An ultrasonic
 pulse is generated and reflected off of any obstacles. When there is an echo, the
 <cite>Echo</cite> pin will provide a <code class="docutils literal notranslate"><span class="pre">0</span></code>-<code class="docutils literal notranslate"><span class="pre">1</span></code>-<code class="docutils literal notranslate"><span class="pre">0</span></code>-pulse whose duration is proportional
 to the distance to the obstacle.</p>
-<p>Detailed theorie and tutorials for the HC-SR04 can be found on <a class="reference external" href="https://www.adafruit.com/product/3942">Adafruit</a> and <a class="reference external" href="https://howtomechatronics.com/tutorials/arduino/ultrasonic-sensor-hc-sr04/">HowMechatronics</a>.</p>
+<p>Detailed theory and tutorials for the HC-SR04 can be found on <a class="reference external" href="https://www.adafruit.com/product/3942">Adafruit</a> and <a class="reference external" href="https://howtomechatronics.com/tutorials/arduino/ultrasonic-sensor-hc-sr04/">HowMechatronics</a>.</p>
+</div>
+<div class="section" id="ir-line-tracking">
+<h2>IR line tracking<a class="headerlink" href="#ir-line-tracking" title="Permalink to this headline">¶</a></h2>
+<p>The PicoGo robot features 5 infrared line following sensors.</p>
+<img alt="IR tracking sensor schema" src="_images/ir_tracking_schema.png" />
+<a class="reference internal image-reference" href="_images/ir_tracking_location.png"><img alt="IR tracking sensors on the robot" src="_images/ir_tracking_location.png" style="width: 49%;" /></a>
+<p>To detect the brightness of the surface beneath the robot, 5 Everlight ITR20001/T opto
+interruptors are used. These are connected to 2 different AD-converters.</p>
+<p>The sensors on the far left and far right of the robot are directly connected to an ADC input
+of the RP2040. ADC1 (Pin32) and ADC2 (Pin34) are used for this purpose. The 3 sensors in the
+middle are connected to the ADS1015 external AD-converter that is then connected to the RP2040
+over I2C.</p>
+<p>When reading the ADC-values from the corresponding converters, be aware of the different
+value ranges. Both AD-converters have a resolution of 12-bit. However due to different
+interfaces and software libraries, the read values have a different range. The below tables
+show the ranges for an ADS1015 configuration with a “programmable gain amplifier (PGA)”
+setting of +/-4.096V and the ADC MicroPython module.</p>
+<p>For values from the ADS1015, the following data is relevant:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 84%" />
+<col style="width: 16%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>Maximum possible input voltage [V]</p></td>
+<td><p>4.096</p></td>
+</tr>
+<tr class="row-even"><td><p>Digital input value for max voltage</p></td>
+<td><p>2048</p></td>
+</tr>
+<tr class="row-odd"><td><p>Digital input value for 3.3V input</p></td>
+<td><p>1650</p></td>
+</tr>
+</tbody>
+</table>
+<p>For values from the RP2040, the following data is relevant:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 89%" />
+<col style="width: 11%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>Maximum possible input voltage [V]</p></td>
+<td><p>3.3</p></td>
+</tr>
+<tr class="row-even"><td><p>Digital input value for max voltage</p></td>
+<td><p>4096</p></td>
+</tr>
+<tr class="row-odd"><td><p>Value reported by MicroPython library for max voltage</p></td>
+<td><p>65536</p></td>
+</tr>
+</tbody>
+</table>
+<p>As you can see, the MicroPython library provides a normalized 16-bit reading
+from the ADC, even though the RP2040 only has a 12-bit ADC. The provided value is
+scaled up for this purpose.</p>
 </div>
 <div class="section" id="display">
 <h2>Display<a class="headerlink" href="#display" title="Permalink to this headline">¶</a></h2>
