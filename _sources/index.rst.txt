@@ -12,6 +12,7 @@ Welcome to PicoGo MyBot's documentation!
 
    hardware
    modules
+   knowhow/index
 
 Indices and tables
 ==================
