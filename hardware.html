@@ -43,11 +43,13 @@
 <li class="toctree-l2"><a class="reference internal" href="#ultrasonic-ranging">Ultrasonic ranging</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ir-line-tracking">IR line tracking</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#display">Display</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#beeper">Beeper</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#lighting">Lighting</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">mybot</a></li>
 <li class="toctree-l1"><a class="reference internal" href="knowhow/index.html">Know-how</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modifications.html">Modifications</a></li>
 </ul>
 
         </div>
@@ -346,6 +348,16 @@ user interface.</p>
 It’s connected to the RP2040 via the SPI bus. The display controller itself is a
 Sitronix ST7789 TFT-LCD driver. Every pixel is represented by a 16-bit 5-6-5 RGB value.</p>
 </div>
+<div class="section" id="beeper">
+<h2>Beeper<a class="headerlink" href="#beeper" title="Permalink to this headline">¶</a></h2>
+<p>The PicoGo robot features a simple beeper or buzzer.</p>
+<a class="reference internal image-reference" href="_images/beeper_schema.png"><img alt="Beeper schema" src="_images/beeper_schema.png" style="width: 49%;" /></a>
+<a class="reference internal image-reference" href="_images/beeper_location.png"><img alt="Beeper location on the robot" src="_images/beeper_location.png" style="width: 49%;" /></a>
+<p>The beeper is of unknown brand. It is a black cylinder that can be found under the
+Raspberry Pi Pico board on the top of the robot base PCB. The beeper has a fixed
+frequency of 2684 Hz and can simply be turned on or off using the corresponding GPIO
+pin. There is no way of modulating the frequency.</p>
+</div>
 <div class="section" id="lighting">
 <h2>Lighting<a class="headerlink" href="#lighting" title="Permalink to this headline">¶</a></h2>
 <p>The PicoGo robot features 4 Worldsemi WS2812 intelligent control LEDs.</p>
@@ -353,7 +365,9 @@ Sitronix ST7789 TFT-LCD driver. Every pixel is represented by a 16-bit 5-6-5 RGB
 <a class="reference internal image-reference" href="_images/lighting_location.png"><img alt="Lighting schema location on the robot" src="_images/lighting_location.png" style="width: 49%;" /></a>
 <p>The RGB LEDs are connected in series through a NeoPixel compatible 1-wire bus. Using
 MicroPythons <code class="docutils literal notranslate"><span class="pre">neopixel</span></code> library, the LED at index 0 is the one to the right, the one
-at index 3 is to the left of the robot.</p>
+at index 3 is to the left of the robot. When creating the <code class="docutils literal notranslate"><span class="pre">NeoPixel</span></code> instance, use
+4 as the number of LEDs and otherwise just use the default values: <code class="docutils literal notranslate"><span class="pre">bpp=3</span></code> for RGB
+LEDs and <code class="docutils literal notranslate"><span class="pre">timing=1</span></code> for 800 kHz operation.</p>
 </div>
 </div>
 
