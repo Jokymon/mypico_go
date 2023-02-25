@@ -199,4 +199,7 @@ The PicoGo robot features 4 Worldsemi WS2812 intelligent control LEDs.
 
 The RGB LEDs are connected in series through a NeoPixel compatible 1-wire bus. Using
 MicroPythons ``neopixel`` library, the LED at index 0 is the one to the right, the one
-at index 3 is to the left of the robot.
+at index 3 is to the left of the robot. When creating the ``NeoPixel`` instance, use
+4 as the number of LEDs and otherwise just use the default values: ``bpp=3`` for RGB
+LEDs and ``timing=1`` for 800 kHz operation.
+
