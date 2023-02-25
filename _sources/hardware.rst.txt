@@ -185,3 +185,18 @@ user interface.
 The display is a WaveShare module with an LCD of a resolution of 240 x 135 pixel. 
 It's connected to the RP2040 via the SPI bus. The display controller itself is a
 Sitronix ST7789 TFT-LCD driver. Every pixel is represented by a 16-bit 5-6-5 RGB value.
+
+Lighting
+--------
+
+The PicoGo robot features 4 Worldsemi WS2812 intelligent control LEDs.
+
+.. image:: images/lighting_schema.png
+    :alt: Lighting schema
+.. image:: images/lighting_location.png
+    :alt: Lighting schema location on the robot
+    :width: 49%
+
+The RGB LEDs are connected in series through a NeoPixel compatible 1-wire bus. Using
+MicroPythons ``neopixel`` library, the LED at index 0 is the one to the right, the one
+at index 3 is to the left of the robot.
