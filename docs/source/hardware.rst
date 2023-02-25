@@ -186,6 +186,23 @@ The display is a WaveShare module with an LCD of a resolution of 240 x 135 pixel
 It's connected to the RP2040 via the SPI bus. The display controller itself is a
 Sitronix ST7789 TFT-LCD driver. Every pixel is represented by a 16-bit 5-6-5 RGB value.
 
+Beeper
+------
+
+The PicoGo robot features a simple beeper or buzzer. 
+
+.. image:: images/beeper_schema.png
+    :alt: Beeper schema
+    :width: 49%
+.. image:: images/beeper_location.png
+    :alt: Beeper location on the robot
+    :width: 49%
+
+The beeper is of unknown brand. It is a black cylinder that can be found under the
+Raspberry Pi Pico board on the top of the robot base PCB. The beeper has a fixed
+frequency of 2684 Hz and can simply be turned on or off using the corresponding GPIO
+pin. There is no way of modulating the frequency.
+
 Lighting
 --------
 
