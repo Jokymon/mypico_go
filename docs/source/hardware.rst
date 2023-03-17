@@ -220,3 +220,29 @@ at index 3 is to the left of the robot. When creating the ``NeoPixel`` instance,
 4 as the number of LEDs and otherwise just use the default values: ``bpp=3`` for RGB
 LEDs and ``timing=1`` for 800 kHz operation.
 
+Bluetooth
+---------
+
+The PicoGo robot features a Bluetooth Low Energy (BLE) communications module for
+wireless communications with a PC or a mobile phone.
+
+.. image:: images/ble_schema.png
+    :alt: BLE module schema
+    :width: 49%
+.. image:: images/ble_location.png
+    :alt: BLE module location on the robot
+    :width: 49%
+
+The module is a JDY-32 dual mode bluetooth 4.2 module supporting the SPP BLE
+serial port UART profile.
+
+While the module is unpaired, it is in AT command mode. In this mode you can open a
+UART connection with 9600 baud and talk to the module using AT commands. This allows
+you to query such things as the module version, the MAC address or the BLE broadcast
+names. In this mode you can also configure the baud rate that is used in the connected
+mode. By default this is 9600 baud.
+
+Once the module is paired, it shows up as a UART device on the paired device. Now
+you can communicate with the PicoGo robot via serial port, using the baudrate
+configured or the default baud rate if you changed nothing in the configuration. The
+protocol between PC or mobile phone and the PicoGo robot can be defined by yourself.
