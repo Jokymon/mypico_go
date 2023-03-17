@@ -45,6 +45,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#display">Display</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#beeper">Beeper</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#lighting">Lighting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#bluetooth">Bluetooth</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">mybot</a></li>
@@ -368,6 +369,24 @@ MicroPythons <code class="docutils literal notranslate"><span class="pre">neopix
 at index 3 is to the left of the robot. When creating the <code class="docutils literal notranslate"><span class="pre">NeoPixel</span></code> instance, use
 4 as the number of LEDs and otherwise just use the default values: <code class="docutils literal notranslate"><span class="pre">bpp=3</span></code> for RGB
 LEDs and <code class="docutils literal notranslate"><span class="pre">timing=1</span></code> for 800 kHz operation.</p>
+</div>
+<div class="section" id="bluetooth">
+<h2>Bluetooth<a class="headerlink" href="#bluetooth" title="Permalink to this headline">¶</a></h2>
+<p>The PicoGo robot features a Bluetooth Low Energy (BLE) communications module for
+wireless communications with a PC or a mobile phone.</p>
+<a class="reference internal image-reference" href="_images/ble_schema.png"><img alt="BLE module schema" src="_images/ble_schema.png" style="width: 49%;" /></a>
+<a class="reference internal image-reference" href="_images/ble_location.png"><img alt="BLE module location on the robot" src="_images/ble_location.png" style="width: 49%;" /></a>
+<p>The module is a JDY-32 dual mode bluetooth 4.2 module supporting the SPP BLE
+serial port UART profile.</p>
+<p>While the module is unpaired, it is in AT command mode. In this mode you can open a
+UART connection with 9600 baud and talk to the module using AT commands. This allows
+you to query such things as the module version, the MAC address or the BLE broadcast
+names. In this mode you can also configure the baud rate that is used in the connected
+mode. By default this is 9600 baud.</p>
+<p>Once the module is paired, it shows up as a UART device on the paired device. Now
+you can communicate with the PicoGo robot via serial port, using the baudrate
+configured or the default baud rate if you changed nothing in the configuration. The
+protocol between PC or mobile phone and the PicoGo robot can be defined by yourself.</p>
 </div>
 </div>
 

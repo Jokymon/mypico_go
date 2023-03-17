@@ -75,10 +75,10 @@
 (hopefully) improve the functionality of the robot. Implement them on your own risk.</p>
 <div class="section" id="beeper-with-changeable-frequencies">
 <h2>Beeper with changeable frequencies<a class="headerlink" href="#beeper-with-changeable-frequencies" title="Permalink to this headline">¶</a></h2>
-<p>The built-in buzzer unfortunately can only buzz on one specific frequency an also
+<p>The built-in buzzer unfortunately can only buzz on one specific frequency and also
 is quiet loud. Therefore I decided to try and replace it with a passive buzzer
-that can be modulated. From another project I knew a type of buzzer that should
-work with 3.3V MCU is the muRata PKMCS0909E4000-R1.</p>
+that can be modulated. From another project, I knew a type of buzzer that should
+work with 3.3V MCUs. The device is a muRata PKMCS0909E4000-R1.</p>
 <p>These are the changes in the schema that I made:</p>
 <a class="reference internal image-reference" href="_images/modification_buzzer_schema.png"><img alt="Schema change for the passive buzzer" src="_images/modification_buzzer_schema.png" style="width: 49%;" /></a>
 <p>I removed the existing active buzzer and soldered two small wires in place. The

@@ -7,10 +7,10 @@ In this section I describe modifications I successfully made on my PicoGo robot 
 Beeper with changeable frequencies
 ----------------------------------
 
-The built-in buzzer unfortunately can only buzz on one specific frequency an also
+The built-in buzzer unfortunately can only buzz on one specific frequency and also
 is quiet loud. Therefore I decided to try and replace it with a passive buzzer
-that can be modulated. From another project I knew a type of buzzer that should
-work with 3.3V MCU is the muRata PKMCS0909E4000-R1.
+that can be modulated. From another project, I knew a type of buzzer that should
+work with 3.3V MCUs. The device is a muRata PKMCS0909E4000-R1.
 
 These are the changes in the schema that I made:
 
