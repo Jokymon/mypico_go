@@ -16,7 +16,7 @@ bit first; so the Input Shift Register should be configured to shift right
 and autopush after 32 bits, as in the initialisation function below.
 
 IR codes can be extracted from the sm RX fifo. Values might look like this:
-0xa15eff00
+``0xa15eff00``
 
 The first byte 0xa1 is the inverse of the following code 0x5e and 0xff, the
 inverse of 0x00 is a form of control code. The second byte, here 0x5e,

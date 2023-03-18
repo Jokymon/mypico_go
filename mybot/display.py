@@ -5,6 +5,9 @@ import rp2
 
 
 def for_lcd(r, g, b):
+    """Function to convert a regular RGB code (such as those defined in
+    :py:class:`display.Colors`) into 565-encoded colors used in the
+    :py:class:`display.ST7789` display class."""
     red = r >> 3
     green = g >> 2
     blue = b >> 3
@@ -13,6 +16,7 @@ def for_lcd(r, g, b):
 
 
 class Colors:
+    """A collection of RGB color codes."""
     BLACK = (0, 0, 0)
     WHITE = (255, 255, 255)
     RED = (255, 0, 0)
@@ -26,6 +30,13 @@ class Colors:
 
 
 class ST7789(framebuf.FrameBuffer):
+    """This class implements MicroPythons :py:class:`framebuf.FrameBuffer`
+    class to provide such functions as :py:meth:`framebuf.FrameBuffer.line`,
+    :py:meth:`framebuf.FrameBuffer.pixel` or
+    :py:meth:`framebuf.FrameBuffer.text` on PicoGos LCD.
+
+    See the underlying framebuffer class in MicroPython for the available
+    functions and their parameters."""
     def __init__(self):
         self.width = 240
         self.height = 135
@@ -61,7 +72,7 @@ class ST7789(framebuf.FrameBuffer):
         self.cs(1)
 
     def init_display(self):
-        """Initialize dispaly"""
+        """Initialize display"""
         self.rst(1)
         self.rst(0)
         self.rst(1)
@@ -183,7 +194,11 @@ def ws2812():
 
 
 class NeoPixel:
-    PIN_NUM = 22
+    """A class to simplify the control of the neopixel-like RGB-color LEDs.
+
+    This implementation uses the RP2040s PIO module to communicate with the
+    LEDs.
+    """
     NUM_LEDS = 4
 
     def __init__(self):
@@ -191,7 +206,7 @@ class NeoPixel:
         self.brightness = 0.8
 
         self.sm = rp2.StateMachine(0, ws2812, freq=8_000_000,
-                                   sideset_base=Pin(self.PIN_NUM))
+                                   sideset_base=Pin(22))
         self.sm.active(1)
 
         self.pixel_array = array.array("I", [0 for _ in range(self.NUM_LEDS)])
