@@ -8,3 +8,4 @@ mybot
    display
    ir_remote
    menu
+   tracking
