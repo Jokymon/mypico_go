@@ -48,6 +48,45 @@ PicoGo Hardware
 | Ultrasonic distance echo    | GPIO15   | 20  | 21  | GPIO16   | Motor PWM left  |
 +-----------------------------+----------+-----+-----+----------+-----------------+
 
+Motors
+------
+
+The PicoGo robot features two independently controllable DC gear motors for movement.
+
+.. image:: images/motors_schema.png
+    :alt: Motors schema
+    :width: 49%
+.. image:: images/motors_location.png
+    :alt: Motors location on the robot
+    :width: 49%
+
+The motors can be controlled using a Toshiba TB6612FNG dual DC motor driver IC. Two
+pins per motor control the direction in which the motors are running. The following
+tables give the details for the movements.
+
+For the left motor:
+
++-------------+-------------+---------+----------+-----+-------------+
+| Driver pins | RP2040 pins | forward | backward | off | short brake |
++=============+=============+=========+==========+=====+=============+
+| AIN1        | GPIO18      | 0       | 1        | 0   | 1           |
++-------------+-------------+---------+----------+-----+-------------+
+| AIN2        | GPIO17      | 1       | 0        | 0   | 1           |
++-------------+-------------+---------+----------+-----+-------------+
+
+For the right motor:
+
++-------------+-------------+---------+----------+-----+-------------+
+| Driver pins | RP2040 pins | forward | backward | off | short brake |
++=============+=============+=========+==========+=====+=============+
+| BIN1        | GPIO19      | 0       | 1        | 0   | 1           |
++-------------+-------------+---------+----------+-----+-------------+
+| BIN2        | GPIO20      | 1       | 0        | 0   | 1           |
++-------------+-------------+---------+----------+-----+-------------+
+
+Using the two PWM inputs, PWMA on GPIO16 for the left motor and PWMB on
+GPIO21 for the right motor, you can control the speed of the motors.
+
 Infrared receiver
 -----------------
 
