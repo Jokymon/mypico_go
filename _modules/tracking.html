@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tracking &mdash; PicoGo MyBot 0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> PicoGo MyBot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../hardware.html">PicoGo Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">mybot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../knowhow/index.html">Know-how</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modifications.html">Modifications</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PicoGo MyBot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Module code</a> &raquo;</li>
+      <li>tracking</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for tracking</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">machine</span> <span class="kn">import</span> <span class="n">I2C</span>
+<span class="kn">import</span> <span class="nn">machine</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+
+<span class="n">ADS_I2C_ADDRESS</span> <span class="o">=</span> <span class="mh">0x48</span>
+
+<span class="c1"># Pointer Register</span>
+<span class="n">ADS_POINTER_CONVERT</span> <span class="o">=</span> <span class="mh">0x00</span>
+<span class="n">ADS_POINTER_CONFIG</span> <span class="o">=</span> <span class="mh">0x01</span>
+<span class="n">ADS_POINTER_LOWTHRESH</span> <span class="o">=</span> <span class="mh">0x02</span>
+<span class="n">ADS_POINTER_HIGHTHRESH</span> <span class="o">=</span> <span class="mh">0x03</span>
+
+<span class="c1"># Config Register</span>
+<span class="n">ADS_CONFIG_OS_BUSY</span> <span class="o">=</span> <span class="mh">0x0000</span>      <span class="c1"># Device is currently performing a conversion</span>
+<span class="n">ADS_CONFIG_OS_NOBUSY</span> <span class="o">=</span> <span class="mh">0x8000</span>      <span class="c1"># Device is not currently performing a conversion</span>
+<span class="n">ADS_CONFIG_OS_SINGLE_CONVERT</span> <span class="o">=</span> <span class="mh">0x8000</span>      <span class="c1"># Start a single conversion (when in power-down state)</span>
+<span class="n">ADS_CONFIG_OS_NO_EFFECT</span> <span class="o">=</span> <span class="mh">0x0000</span>      <span class="c1"># No effect</span>
+<span class="n">ADS_CONFIG_MUX_MUL_0_1</span> <span class="o">=</span> <span class="mh">0x0000</span>      <span class="c1"># Input multiplexer,AINP = AIN0 and AINN = AIN1(default)</span>
+<span class="n">ADS_CONFIG_MUX_MUL_0_3</span> <span class="o">=</span> <span class="mh">0x1000</span>      <span class="c1"># Input multiplexer,AINP = AIN0 and AINN = AIN3</span>
+<span class="n">ADS_CONFIG_MUX_MUL_1_3</span> <span class="o">=</span> <span class="mh">0x2000</span>      <span class="c1"># Input multiplexer,AINP = AIN1 and AINN = AIN3</span>
+<span class="n">ADS_CONFIG_MUX_MUL_2_3</span> <span class="o">=</span> <span class="mh">0x3000</span>      <span class="c1"># Input multiplexer,AINP = AIN2 and AINN = AIN3</span>
+<span class="n">ADS_CONFIG_MUX_SINGLE_0</span> <span class="o">=</span> <span class="mh">0x4000</span>      <span class="c1"># SINGLE,AIN0</span>
+<span class="n">ADS_CONFIG_MUX_SINGLE_1</span> <span class="o">=</span> <span class="mh">0x5000</span>      <span class="c1"># SINGLE,AIN1</span>
+<span class="n">ADS_CONFIG_MUX_SINGLE_2</span> <span class="o">=</span> <span class="mh">0x6000</span>      <span class="c1"># SINGLE,AIN2</span>
+<span class="n">ADS_CONFIG_MUX_SINGLE_3</span> <span class="o">=</span> <span class="mh">0x7000</span>      <span class="c1"># SINGLE,AIN3</span>
+<span class="n">ADS_CONFIG_PGA_6144</span> <span class="o">=</span> <span class="mh">0x0000</span>      <span class="c1"># Gain= +/- 6.144V</span>
+<span class="n">ADS_CONFIG_PGA_4096</span> <span class="o">=</span> <span class="mh">0x0200</span>      <span class="c1"># Gain= +/- 4.096V</span>
+<span class="n">ADS_CONFIG_PGA_2048</span> <span class="o">=</span> <span class="mh">0x0400</span>      <span class="c1"># Gain= +/- 2.048V(default)</span>
+<span class="n">ADS_CONFIG_PGA_1024</span> <span class="o">=</span> <span class="mh">0x0600</span>      <span class="c1"># Gain= +/- 1.024V</span>
+<span class="n">ADS_CONFIG_PGA_512</span> <span class="o">=</span> <span class="mh">0x0800</span>      <span class="c1"># Gain= +/- 0.512V</span>
+<span class="n">ADS_CONFIG_PGA_256</span> <span class="o">=</span> <span class="mh">0x0A00</span>      <span class="c1"># Gain= +/- 0.256V</span>
+<span class="n">ADS_CONFIG_MODE_CONTINUOUS</span> <span class="o">=</span> <span class="mh">0x0000</span>      <span class="c1"># Device operating mode:Continuous-conversion mode</span>
+<span class="n">ADS_CONFIG_MODE_NOCONTINUOUS</span> <span class="o">=</span> <span class="mh">0x0100</span>      <span class="c1"># Device operating mode：Single-shot mode or power-down state (default)</span>
+<span class="n">ADS_CONFIG_DR_RATE_128</span> <span class="o">=</span> <span class="mh">0x0000</span>      <span class="c1"># Data rate=128SPS</span>
+<span class="n">ADS_CONFIG_DR_RATE_250</span> <span class="o">=</span> <span class="mh">0x0020</span>      <span class="c1"># Data rate=250SPS</span>
+<span class="n">ADS_CONFIG_DR_RATE_490</span> <span class="o">=</span> <span class="mh">0x0040</span>      <span class="c1"># Data rate=490SPS</span>
+<span class="n">ADS_CONFIG_DR_RATE_920</span> <span class="o">=</span> <span class="mh">0x0060</span>      <span class="c1"># Data rate=920SPS</span>
+<span class="n">ADS_CONFIG_DR_RATE_1600</span> <span class="o">=</span> <span class="mh">0x0080</span>      <span class="c1"># Data rate=1600SPS</span>
+<span class="n">ADS_CONFIG_DR_RATE_2400</span> <span class="o">=</span> <span class="mh">0x00A0</span>      <span class="c1"># Data rate=2400SPS</span>
+<span class="n">ADS_CONFIG_DR_RATE_3300</span> <span class="o">=</span> <span class="mh">0x00C0</span>      <span class="c1"># Data rate=3300SPS</span>
+<span class="n">ADS_CONFIG_COMP_MODE_WINDOW</span> <span class="o">=</span> <span class="mh">0x0010</span>      <span class="c1"># Comparator mode：Window comparator</span>
+<span class="n">ADS_CONFIG_COMP_MODE_TRADITIONAL</span> <span class="o">=</span> <span class="mh">0x0000</span>      <span class="c1"># Comparator mode：Traditional comparator (default)</span>
+<span class="n">ADS_CONFIG_COMP_POL_LOW</span> <span class="o">=</span> <span class="mh">0x0000</span>      <span class="c1"># Comparator polarity：Active low (default)</span>
+<span class="n">ADS_CONFIG_COMP_POL_HIGH</span> <span class="o">=</span> <span class="mh">0x0008</span>      <span class="c1"># Comparator polarity：Active high</span>
+<span class="n">ADS_CONFIG_COMP_LAT</span> <span class="o">=</span> <span class="mh">0x0004</span>      <span class="c1"># Latching comparator</span>
+<span class="n">ADS_CONFIG_COMP_NONLAT</span> <span class="o">=</span> <span class="mh">0x0000</span>      <span class="c1"># Nonlatching comparator (default)</span>
+<span class="n">ADS_CONFIG_COMP_QUE_ONE</span> <span class="o">=</span> <span class="mh">0x0000</span>      <span class="c1"># Assert after one conversion</span>
+<span class="n">ADS_CONFIG_COMP_QUE_TWO</span> <span class="o">=</span> <span class="mh">0x0001</span>      <span class="c1"># Assert after two conversions</span>
+<span class="n">ADS_CONFIG_COMP_QUE_FOUR</span> <span class="o">=</span> <span class="mh">0x0002</span>      <span class="c1"># Assert after four conversions</span>
+<span class="n">ADS_CONFIG_COMP_QUE_NON</span> <span class="o">=</span> <span class="mh">0x0003</span>      <span class="c1"># Disable comparator and set ALERT/RDY pin to high-impedance (default)</span>
+
+
+<div class="viewcode-block" id="ADS1015"><a class="viewcode-back" href="../modules/tracking.html#tracking.ADS1015">[docs]</a><span class="k">class</span> <span class="nc">ADS1015</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Encapsulation of the external AD converter ADS1015.&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i2c_bus</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">addr</span><span class="o">=</span><span class="n">ADS_I2C_ADDRESS</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">i2c</span> <span class="o">=</span> <span class="n">I2C</span><span class="p">(</span><span class="n">i2c_bus</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">addr</span> <span class="o">=</span> <span class="n">addr</span>
+
+<div class="viewcode-block" id="ADS1015.set_channel"><a class="viewcode-back" href="../modules/tracking.html#tracking.ADS1015.set_channel">[docs]</a>    <span class="k">def</span> <span class="nf">set_channel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">channel</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Configure the ADC to read a single value from the specified</span>
+<span class="sd">        channel.&quot;&quot;&quot;</span>
+        <span class="n">ads_config</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">ADS_CONFIG_MODE_NOCONTINUOUS</span> <span class="o">|</span>      <span class="c1"># Single-shot mode</span>
+            <span class="n">ADS_CONFIG_PGA_4096</span> <span class="o">|</span>               <span class="c1"># Gain= +/- 4.096V</span>
+            <span class="n">ADS_CONFIG_COMP_QUE_NON</span> <span class="o">|</span>           <span class="c1"># Disable comparator</span>
+            <span class="n">ADS_CONFIG_COMP_NONLAT</span> <span class="o">|</span>            <span class="c1"># Nonlatching comparator</span>
+            <span class="n">ADS_CONFIG_COMP_POL_LOW</span> <span class="o">|</span>           <span class="c1"># Comparator polarity Active low</span>
+            <span class="n">ADS_CONFIG_COMP_MODE_TRADITIONAL</span> <span class="o">|</span>  <span class="c1"># Traditional comparator</span>
+            <span class="n">ADS_CONFIG_DR_RATE_3300</span>             <span class="c1"># Data rate=3300 SPS</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">channel</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">ads_config</span> <span class="o">|=</span> <span class="n">ADS_CONFIG_MUX_SINGLE_0</span>
+        <span class="k">elif</span> <span class="n">channel</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">ads_config</span> <span class="o">|=</span> <span class="n">ADS_CONFIG_MUX_SINGLE_1</span>
+        <span class="k">elif</span> <span class="n">channel</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">ads_config</span> <span class="o">|=</span> <span class="n">ADS_CONFIG_MUX_SINGLE_2</span>
+        <span class="k">elif</span> <span class="n">channel</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">ads_config</span> <span class="o">|=</span> <span class="n">ADS_CONFIG_MUX_SINGLE_3</span>
+        <span class="n">ads_config</span> <span class="o">|=</span> <span class="n">ADS_CONFIG_OS_SINGLE_CONVERT</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_write_word</span><span class="p">(</span><span class="n">ADS_POINTER_CONFIG</span><span class="p">,</span> <span class="n">ads_config</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ADS1015.read_u16"><a class="viewcode-back" href="../modules/tracking.html#tracking.ADS1015.read_u16">[docs]</a>    <span class="k">def</span> <span class="nf">read_u16</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">channel</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Read a 16-bit ADC value from the previously set channel.</span>
+
+<span class="sd">        The values read from the ADC are normalized to a full-range</span>
+<span class="sd">        16-bit value.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_channel</span><span class="p">(</span><span class="n">channel</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.003</span><span class="p">)</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_read_word</span><span class="p">(</span><span class="n">ADS_POINTER_CONVERT</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">4</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">*</span><span class="mh">0x10000</span><span class="o">/</span><span class="mf">1650.0</span>
+        <span class="k">return</span> <span class="n">value</span></div>
+
+    <span class="k">def</span> <span class="nf">_read_word</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">i2c</span><span class="o">.</span><span class="n">readfrom_mem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">addr</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">((</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">256</span><span class="p">)</span> <span class="o">+</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">_write_word</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">temp</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span> <span class="o">&amp;</span> <span class="mh">0xFF</span>
+        <span class="n">temp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">val</span> <span class="o">&amp;</span> <span class="mh">0xFF00</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">i2c</span><span class="o">.</span><span class="n">writeto_mem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">addr</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">temp</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="LineSensor"><a class="viewcode-back" href="../modules/tracking.html#tracking.LineSensor">[docs]</a><span class="k">class</span> <span class="nc">LineSensor</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_sensors</span> <span class="o">=</span> <span class="mi">5</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_value</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">adc1</span> <span class="o">=</span> <span class="n">machine</span><span class="o">.</span><span class="n">ADC</span><span class="p">(</span><span class="mi">27</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">adc5</span> <span class="o">=</span> <span class="n">machine</span><span class="o">.</span><span class="n">ADC</span><span class="p">(</span><span class="mi">28</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">adc</span> <span class="o">=</span> <span class="n">ADS1015</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_calibration</span><span class="p">()</span>
+
+<div class="viewcode-block" id="LineSensor.analog_read"><a class="viewcode-back" href="../modules/tracking.html#tracking.LineSensor.analog_read">[docs]</a>    <span class="k">def</span> <span class="nf">analog_read</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Read the sensor values from all five line tracking sensors and</span>
+<span class="sd">        return them in an array.</span>
+
+<span class="sd">        The read values are normalized to the range 0 - 1024.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">num_sensors</span>
+
+        <span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">adc1</span><span class="o">.</span><span class="n">read_u16</span><span class="p">()</span><span class="o">*</span><span class="mi">1024</span><span class="o">/</span><span class="mh">0x10000</span><span class="p">)</span>
+
+        <span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">adc</span><span class="o">.</span><span class="n">read_u16</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">*</span><span class="mi">1024</span><span class="o">/</span><span class="mh">0x10000</span><span class="p">)</span>
+        <span class="n">value</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">adc</span><span class="o">.</span><span class="n">read_u16</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="mi">1024</span><span class="o">/</span><span class="mh">0x10000</span><span class="p">)</span>
+        <span class="n">value</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">adc</span><span class="o">.</span><span class="n">read_u16</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="mi">1024</span><span class="o">/</span><span class="mh">0x10000</span><span class="p">)</span>
+
+        <span class="n">value</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">adc5</span><span class="o">.</span><span class="n">read_u16</span><span class="p">()</span><span class="o">*</span><span class="mi">1024</span><span class="o">/</span><span class="mh">0x10000</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">value</span></div>
+
+<div class="viewcode-block" id="LineSensor.reset_calibration"><a class="viewcode-back" href="../modules/tracking.html#tracking.LineSensor.reset_calibration">[docs]</a>    <span class="k">def</span> <span class="nf">reset_calibration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calibrated_min</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1023</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_sensors</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calibrated_max</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_sensors</span></div>
+
+<div class="viewcode-block" id="LineSensor.calibration_cycle"><a class="viewcode-back" href="../modules/tracking.html#tracking.LineSensor.calibration_cycle">[docs]</a>    <span class="k">def</span> <span class="nf">calibration_cycle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Read all line sensor values once and adjust the calibration range</span>
+<span class="sd">        for the individual sensor channels. Once sufficient cycles have been</span>
+<span class="sd">        run, :py:meth:`tracking.LineSensor.read_calibrated` will return a</span>
+<span class="sd">        normalized measurement based on the minima and maxima measurements.</span>
+
+<span class="sd">        For the calibration it is recommended to run multiple calibration</span>
+<span class="sd">        cycles while the robot is moved over the bright and dark undergrounds.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sensor_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">analog_read</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_sensors</span><span class="p">):</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">sensor_values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="mi">200</span><span class="p">:</span>
+                <span class="c1"># ignore values below the threshold</span>
+                <span class="k">continue</span>
+
+            <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">calibrated_min</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">calibrated_min</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="k">if</span> <span class="n">value</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">calibrated_max</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">calibrated_max</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span></div>
+
+<div class="viewcode-block" id="LineSensor.read_calibrated"><a class="viewcode-back" href="../modules/tracking.html#tracking.LineSensor.read_calibrated">[docs]</a>    <span class="k">def</span> <span class="nf">read_calibrated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return values calibrated to a value between 0 and 1000, where</span>
+<span class="sd">        0 corresponds to the minimum value calculated by</span>
+<span class="sd">        :py:meth:`tracking.LineSensor.calibration_cycle()`</span>
+<span class="sd">        and 1000 corresponding to the maximum value.&quot;&quot;&quot;</span>
+        <span class="n">sensor_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">analog_read</span><span class="p">()</span>
+
+        <span class="k">def</span> <span class="nf">scale_and_clamp</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">bottom</span><span class="p">,</span> <span class="n">top</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="mi">200</span><span class="p">:</span>
+                <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">total_range</span> <span class="o">=</span> <span class="n">top</span> <span class="o">-</span> <span class="n">bottom</span>
+                <span class="n">scaled</span> <span class="o">=</span> <span class="p">(</span><span class="n">value</span> <span class="o">-</span> <span class="n">bottom</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1000.0</span> <span class="o">/</span> <span class="n">total_range</span>
+
+                <span class="n">scaled</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">scaled</span><span class="p">)</span>
+                <span class="n">scaled</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="n">scaled</span><span class="p">)</span>
+
+                <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">scaled</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">scale_and_clamp</span><span class="p">,</span>
+                        <span class="n">sensor_values</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">calibrated_min</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">calibrated_max</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="LineSensor.read_line"><a class="viewcode-back" href="../modules/tracking.html#tracking.LineSensor.read_line">[docs]</a>    <span class="k">def</span> <span class="nf">read_line</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">white_line</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Operates the same as read calibrated, but also returns an</span>
+<span class="sd">        estimated position of the robot with respect to a line. The</span>
+<span class="sd">        estimate is made using a weighted average of the sensor indices</span>
+<span class="sd">        multiplied by 1000, so that a return value of 0 indicates that</span>
+<span class="sd">        the line is directly below sensor 0, a return value of 1000</span>
+<span class="sd">        indicates that the line is directly below sensor 1, 2000</span>
+<span class="sd">        indicates that it&#39;s below sensor 2000, etc.  Intermediate</span>
+<span class="sd">        values indicate that the line is between two sensors.  The</span>
+<span class="sd">        formula is:</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            \\frac{0 \\cdot value0 + 1000 \\cdot value1 + 2000 \\cdot</span>
+<span class="sd">                value2 + \\dotso}</span>
+<span class="sd">            {value0  +  value1  +  value2 + \\dotso}</span>
+
+<span class="sd">        By default, this function assumes a dark line (high values)</span>
+<span class="sd">        surrounded by white (low values).  If your line is light on</span>
+<span class="sd">        black, set the optional second argument white_line to true.  In</span>
+<span class="sd">        this case, each sensor value will be replaced by (1000-value)</span>
+<span class="sd">        before the averaging.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sensor_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_calibrated</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">white_line</span><span class="p">:</span>
+            <span class="n">sensor_values</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">1000</span><span class="o">-</span><span class="n">x</span><span class="p">,</span> <span class="n">sensor_values</span><span class="p">))</span>
+
+        <span class="n">avg</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">on_line</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sensor_values</span><span class="p">):</span>
+            <span class="c1"># does at least one sensor still detect a line?</span>
+            <span class="c1"># The value can be bigger than 1000 if the sensor</span>
+            <span class="c1"># didn&#39;t detect any black/white at all and returned -1</span>
+            <span class="k">if</span> <span class="n">value</span> <span class="o">&gt;</span> <span class="mi">500</span> <span class="ow">and</span> <span class="n">value</span> <span class="o">&lt;=</span> <span class="mi">1000</span><span class="p">:</span>
+                <span class="n">on_line</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="c1"># sum up the weighted measurement values</span>
+            <span class="n">avg</span> <span class="o">+=</span> <span class="n">value</span> <span class="o">*</span> <span class="p">(</span><span class="n">index</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">on_line</span><span class="p">:</span>
+            <span class="c1"># If we are no longer on the line, check the last</span>
+            <span class="c1"># position value we calculated. If that value was</span>
+            <span class="c1"># smaller that middle position, just return a 0 for left</span>
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_value</span> <span class="o">&lt;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_sensors</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="mi">1000</span><span class="o">/</span><span class="mi">2</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">last_value</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="c1"># otherwise return the maximum possible value for right</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">last_value</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_sensors</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="mi">1000</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">last_value</span> <span class="o">=</span> <span class="n">avg</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="n">sensor_values</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_value</span><span class="p">),</span> <span class="n">sensor_values</span></div></div>
+
+
+<div class="viewcode-block" id="calib"><a class="viewcode-back" href="../modules/tracking.html#tracking.calib">[docs]</a><span class="k">def</span> <span class="nf">calib</span><span class="p">(</span><span class="n">line_sensor</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Run multiple calibration cycles on the given</span>
+<span class="sd">    :py:class:`tracking.LineSensor` instance. The cycles are run with a 500ms</span>
+<span class="sd">    pause between them. They are run in an infinite loop and need to be</span>
+<span class="sd">    stopped with Ctrl-C.&quot;&quot;&quot;</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">line_sensor</span><span class="o">.</span><span class="n">calibration_cycle</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{line_sensor.calibrated_min}</span><span class="s2"> </span><span class="si">{line_sensor.calibrated_max}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Silvan Wegmann.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

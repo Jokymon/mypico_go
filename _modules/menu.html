@@ -13,6 +13,7 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" /> 
@@ -70,7 +71,7 @@
 <span class="kn">from</span> <span class="nn">ir_remote</span> <span class="kn">import</span> <span class="n">Keys</span>
 
 
-<div class="viewcode-block" id="Menu"><a class="viewcode-back" href="../menu.html#menu.Menu">[docs]</a><span class="k">class</span> <span class="nc">Menu</span><span class="p">:</span>
+<div class="viewcode-block" id="Menu"><a class="viewcode-back" href="../modules/menu.html#menu.Menu">[docs]</a><span class="k">class</span> <span class="nc">Menu</span><span class="p">:</span>
     <span class="n">MARGIN_TOP</span> <span class="o">=</span> <span class="mi">8</span>
     <span class="n">MARGIN_LEFT</span> <span class="o">=</span> <span class="mi">10</span>
     <span class="n">LINE_SPACING</span> <span class="o">=</span> <span class="mi">10</span>
@@ -84,10 +85,10 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">entered_code</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
-<div class="viewcode-block" id="Menu.set_menu_page"><a class="viewcode-back" href="../menu.html#menu.Menu.set_menu_page">[docs]</a>    <span class="k">def</span> <span class="nf">set_menu_page</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">page</span><span class="p">):</span>
+<div class="viewcode-block" id="Menu.set_menu_page"><a class="viewcode-back" href="../modules/menu.html#menu.Menu.set_menu_page">[docs]</a>    <span class="k">def</span> <span class="nf">set_menu_page</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">page</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">page</span> <span class="o">=</span> <span class="n">page</span></div>
 
-<div class="viewcode-block" id="Menu.process"><a class="viewcode-back" href="../menu.html#menu.Menu.process">[docs]</a>    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Menu.process"><a class="viewcode-back" href="../modules/menu.html#menu.Menu.process">[docs]</a>    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">ir</span><span class="o">.</span><span class="n">key_available</span><span class="p">():</span>
             <span class="k">return</span>
         <span class="n">code</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ir</span><span class="o">.</span><span class="n">get_key</span><span class="p">()</span>
@@ -99,7 +100,7 @@
             <span class="k">if</span> <span class="n">selection</span> <span class="o">&gt;=</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">selection</span> <span class="o">&lt;=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">entries</span><span class="p">):</span>
                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="n">selection</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;cb&quot;</span><span class="p">]()</span></div>
 
-<div class="viewcode-block" id="Menu.draw"><a class="viewcode-back" href="../menu.html#menu.Menu.draw">[docs]</a>    <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Menu.draw"><a class="viewcode-back" href="../modules/menu.html#menu.Menu.draw">[docs]</a>    <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lcd</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">for_lcd</span><span class="p">(</span><span class="o">*</span><span class="n">Colors</span><span class="o">.</span><span class="n">BLACK</span><span class="p">))</span>
         <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">entry</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">entries</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">lcd</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;{index+1:02} </span><span class="si">{entry[&#39;text&#39;]}</span><span class="s2">&quot;</span><span class="p">,</span>

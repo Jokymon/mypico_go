@@ -4,7 +4,10 @@ mybot
 .. toctree::
    :maxdepth: 4
 
-   components
-   display
-   ir_remote
-   menu
+   modules/components
+   modules/display
+   modules/ir_remote
+   modules/menu
+   modules/modifications
+   modules/obstacle
+   modules/tracking

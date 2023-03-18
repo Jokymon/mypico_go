@@ -13,6 +13,7 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" /> 
@@ -72,7 +73,10 @@
 <span class="kn">import</span> <span class="nn">rp2</span>
 
 
-<div class="viewcode-block" id="for_lcd"><a class="viewcode-back" href="../display.html#display.for_lcd">[docs]</a><span class="k">def</span> <span class="nf">for_lcd</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<div class="viewcode-block" id="for_lcd"><a class="viewcode-back" href="../modules/display.html#display.for_lcd">[docs]</a><span class="k">def</span> <span class="nf">for_lcd</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Function to convert a regular RGB code (such as those defined in</span>
+<span class="sd">    :py:class:`display.Colors`) into 565-encoded colors used in the</span>
+<span class="sd">    :py:class:`display.ST7789` display class.&quot;&quot;&quot;</span>
     <span class="n">red</span> <span class="o">=</span> <span class="n">r</span> <span class="o">&gt;&gt;</span> <span class="mi">3</span>
     <span class="n">green</span> <span class="o">=</span> <span class="n">g</span> <span class="o">&gt;&gt;</span> <span class="mi">2</span>
     <span class="n">blue</span> <span class="o">=</span> <span class="n">b</span> <span class="o">&gt;&gt;</span> <span class="mi">3</span>
@@ -80,7 +84,8 @@
     <span class="k">return</span> <span class="p">(</span><span class="n">blue</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="mi">5</span><span class="o">+</span><span class="mi">6</span><span class="p">))</span> <span class="o">|</span> <span class="p">(</span><span class="n">red</span> <span class="o">&lt;&lt;</span> <span class="mi">6</span><span class="p">)</span> <span class="o">|</span> <span class="n">green</span></div>
 
 
-<div class="viewcode-block" id="Colors"><a class="viewcode-back" href="../display.html#display.Colors">[docs]</a><span class="k">class</span> <span class="nc">Colors</span><span class="p">:</span>
+<div class="viewcode-block" id="Colors"><a class="viewcode-back" href="../modules/display.html#display.Colors">[docs]</a><span class="k">class</span> <span class="nc">Colors</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;A collection of RGB color codes.&quot;&quot;&quot;</span>
     <span class="n">BLACK</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
     <span class="n">WHITE</span> <span class="o">=</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>
     <span class="n">RED</span> <span class="o">=</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
@@ -93,7 +98,14 @@
     <span class="n">PURPLE</span> <span class="o">=</span> <span class="p">(</span><span class="mi">180</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="ST7789"><a class="viewcode-back" href="../display.html#display.ST7789">[docs]</a><span class="k">class</span> <span class="nc">ST7789</span><span class="p">(</span><span class="n">framebuf</span><span class="o">.</span><span class="n">FrameBuffer</span><span class="p">):</span>
+<div class="viewcode-block" id="ST7789"><a class="viewcode-back" href="../modules/display.html#display.ST7789">[docs]</a><span class="k">class</span> <span class="nc">ST7789</span><span class="p">(</span><span class="n">framebuf</span><span class="o">.</span><span class="n">FrameBuffer</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;This class implements MicroPythons :py:class:`framebuf.FrameBuffer`</span>
+<span class="sd">    class to provide such functions as :py:meth:`framebuf.FrameBuffer.line`,</span>
+<span class="sd">    :py:meth:`framebuf.FrameBuffer.pixel` or</span>
+<span class="sd">    :py:meth:`framebuf.FrameBuffer.text` on PicoGos LCD.</span>
+
+<span class="sd">    See the underlying framebuffer class in MicroPython for the available</span>
+<span class="sd">    functions and their parameters.&quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="mi">240</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="mi">135</span>
@@ -114,22 +126,22 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="n">framebuf</span><span class="o">.</span><span class="n">RGB565</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">init_display</span><span class="p">()</span>
 
-<div class="viewcode-block" id="ST7789.write_cmd"><a class="viewcode-back" href="../display.html#display.ST7789.write_cmd">[docs]</a>    <span class="k">def</span> <span class="nf">write_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd</span><span class="p">):</span>
+<div class="viewcode-block" id="ST7789.write_cmd"><a class="viewcode-back" href="../modules/display.html#display.ST7789.write_cmd">[docs]</a>    <span class="k">def</span> <span class="nf">write_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cs</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dc</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cs</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">spi</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">([</span><span class="n">cmd</span><span class="p">]))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cs</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ST7789.write_data"><a class="viewcode-back" href="../display.html#display.ST7789.write_data">[docs]</a>    <span class="k">def</span> <span class="nf">write_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buf</span><span class="p">):</span>
+<div class="viewcode-block" id="ST7789.write_data"><a class="viewcode-back" href="../modules/display.html#display.ST7789.write_data">[docs]</a>    <span class="k">def</span> <span class="nf">write_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buf</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cs</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dc</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cs</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">spi</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">([</span><span class="n">buf</span><span class="p">]))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cs</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ST7789.init_display"><a class="viewcode-back" href="../display.html#display.ST7789.init_display">[docs]</a>    <span class="k">def</span> <span class="nf">init_display</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Initialize dispaly&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="ST7789.init_display"><a class="viewcode-back" href="../modules/display.html#display.ST7789.init_display">[docs]</a>    <span class="k">def</span> <span class="nf">init_display</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialize display&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rst</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rst</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rst</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
@@ -212,7 +224,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">write_cmd</span><span class="p">(</span><span class="mh">0x29</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ST7789.show"><a class="viewcode-back" href="../display.html#display.ST7789.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ST7789.show"><a class="viewcode-back" href="../modules/display.html#display.ST7789.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">write_cmd</span><span class="p">(</span><span class="mh">0x2A</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">write_data</span><span class="p">(</span><span class="mh">0x00</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">write_data</span><span class="p">(</span><span class="mh">0x28</span><span class="p">)</span>
@@ -234,7 +246,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">cs</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="ws2812"><a class="viewcode-back" href="../display.html#display.ws2812">[docs]</a><span class="nd">@rp2</span><span class="o">.</span><span class="n">asm_pio</span><span class="p">(</span><span class="n">sideset_init</span><span class="o">=</span><span class="n">rp2</span><span class="o">.</span><span class="n">PIO</span><span class="o">.</span><span class="n">OUT_LOW</span><span class="p">,</span> <span class="n">out_shiftdir</span><span class="o">=</span><span class="n">rp2</span><span class="o">.</span><span class="n">PIO</span><span class="o">.</span><span class="n">SHIFT_LEFT</span><span class="p">,</span>
+<div class="viewcode-block" id="ws2812"><a class="viewcode-back" href="../modules/display.html#display.ws2812">[docs]</a><span class="nd">@rp2</span><span class="o">.</span><span class="n">asm_pio</span><span class="p">(</span><span class="n">sideset_init</span><span class="o">=</span><span class="n">rp2</span><span class="o">.</span><span class="n">PIO</span><span class="o">.</span><span class="n">OUT_LOW</span><span class="p">,</span> <span class="n">out_shiftdir</span><span class="o">=</span><span class="n">rp2</span><span class="o">.</span><span class="n">PIO</span><span class="o">.</span><span class="n">SHIFT_LEFT</span><span class="p">,</span>
              <span class="n">autopull</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pull_thresh</span><span class="o">=</span><span class="mi">24</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">ws2812</span><span class="p">():</span>
     <span class="n">T1</span> <span class="o">=</span> <span class="mi">2</span>
@@ -250,8 +262,12 @@
     <span class="n">wrap</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="NeoPixel"><a class="viewcode-back" href="../display.html#display.NeoPixel">[docs]</a><span class="k">class</span> <span class="nc">NeoPixel</span><span class="p">:</span>
-    <span class="n">PIN_NUM</span> <span class="o">=</span> <span class="mi">22</span>
+<div class="viewcode-block" id="NeoPixel"><a class="viewcode-back" href="../modules/display.html#display.NeoPixel">[docs]</a><span class="k">class</span> <span class="nc">NeoPixel</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;A class to simplify the control of the neopixel-like RGB-color LEDs.</span>
+
+<span class="sd">    This implementation uses the RP2040s PIO module to communicate with the</span>
+<span class="sd">    LEDs.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">NUM_LEDS</span> <span class="o">=</span> <span class="mi">4</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -259,16 +275,16 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">brightness</span> <span class="o">=</span> <span class="mf">0.8</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">sm</span> <span class="o">=</span> <span class="n">rp2</span><span class="o">.</span><span class="n">StateMachine</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ws2812</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="mi">8_000_000</span><span class="p">,</span>
-                                   <span class="n">sideset_base</span><span class="o">=</span><span class="n">Pin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">PIN_NUM</span><span class="p">))</span>
+                                   <span class="n">sideset_base</span><span class="o">=</span><span class="n">Pin</span><span class="p">(</span><span class="mi">22</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sm</span><span class="o">.</span><span class="n">active</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">pixel_array</span> <span class="o">=</span> <span class="n">array</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">NUM_LEDS</span><span class="p">)])</span>
 
-<div class="viewcode-block" id="NeoPixel.set_color"><a class="viewcode-back" href="../display.html#display.NeoPixel.set_color">[docs]</a>    <span class="k">def</span> <span class="nf">set_color</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">led_index</span><span class="p">,</span> <span class="n">color</span><span class="p">):</span>
+<div class="viewcode-block" id="NeoPixel.set_color"><a class="viewcode-back" href="../modules/display.html#display.NeoPixel.set_color">[docs]</a>    <span class="k">def</span> <span class="nf">set_color</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">led_index</span><span class="p">,</span> <span class="n">color</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pixel_array</span><span class="p">[</span><span class="n">led_index</span><span class="p">]</span> <span class="o">=</span> \
             <span class="p">(</span><span class="n">color</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="mi">16</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">color</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">+</span> <span class="n">color</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="NeoPixel.show"><a class="viewcode-back" href="../display.html#display.NeoPixel.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="NeoPixel.show"><a class="viewcode-back" href="../modules/display.html#display.NeoPixel.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">dimmer_ar</span> <span class="o">=</span> <span class="n">array</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">NUM_LEDS</span><span class="p">)])</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pixel_array</span><span class="p">):</span>
             <span class="n">r</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(((</span><span class="n">c</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xFF</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">brightness</span><span class="p">)</span>

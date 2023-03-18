@@ -13,6 +13,7 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" /> 
@@ -84,7 +85,7 @@
 <span class="sd">and autopush after 32 bits, as in the initialisation function below.</span>
 
 <span class="sd">IR codes can be extracted from the sm RX fifo. Values might look like this:</span>
-<span class="sd">0xa15eff00</span>
+<span class="sd">``0xa15eff00``</span>
 
 <span class="sd">The first byte 0xa1 is the inverse of the following code 0x5e and 0xff, the</span>
 <span class="sd">inverse of 0x00 is a form of control code. The second byte, here 0x5e,</span>
@@ -94,7 +95,7 @@
 <span class="kn">import</span> <span class="nn">rp2</span>
 
 
-<div class="viewcode-block" id="Keys"><a class="viewcode-back" href="../ir_remote.html#ir_remote.Keys">[docs]</a><span class="k">class</span> <span class="nc">Keys</span><span class="p">:</span>
+<div class="viewcode-block" id="Keys"><a class="viewcode-back" href="../modules/ir_remote.html#ir_remote.Keys">[docs]</a><span class="k">class</span> <span class="nc">Keys</span><span class="p">:</span>
     <span class="n">KEY_CH_M</span> <span class="o">=</span> <span class="mi">69</span>
     <span class="n">KEY_CH</span> <span class="o">=</span> <span class="mi">70</span>
     <span class="n">KEY_CH_P</span> <span class="o">=</span> <span class="mi">71</span>
@@ -120,7 +121,7 @@
     <span class="n">NUMBER_KEYS</span> <span class="o">=</span> <span class="p">[</span><span class="n">KEY_0</span><span class="p">,</span> <span class="n">KEY_1</span><span class="p">,</span> <span class="n">KEY_2</span><span class="p">,</span> <span class="n">KEY_3</span><span class="p">,</span> <span class="n">KEY_4</span><span class="p">,</span> <span class="n">KEY_5</span><span class="p">,</span> <span class="n">KEY_6</span><span class="p">,</span> <span class="n">KEY_7</span><span class="p">,</span>
                    <span class="n">KEY_8</span><span class="p">,</span> <span class="n">KEY_9</span><span class="p">]</span>
 
-<div class="viewcode-block" id="Keys.is_number"><a class="viewcode-back" href="../ir_remote.html#ir_remote.Keys.is_number">[docs]</a>    <span class="k">def</span> <span class="nf">is_number</span><span class="p">(</span><span class="n">code</span><span class="p">):</span>
+<div class="viewcode-block" id="Keys.is_number"><a class="viewcode-back" href="../modules/ir_remote.html#ir_remote.Keys.is_number">[docs]</a>    <span class="k">def</span> <span class="nf">is_number</span><span class="p">(</span><span class="n">code</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">code</span> <span class="ow">in</span> <span class="n">Keys</span><span class="o">.</span><span class="n">NUMBER_KEYS</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">True</span>
         <span class="k">return</span> <span class="kc">False</span></div></div>
@@ -130,8 +131,8 @@
 <span class="n">BIT_SAMPLE_DELAY</span> <span class="o">=</span> <span class="mi">15</span>
 
 
-<div class="viewcode-block" id="IRreceiver"><a class="viewcode-back" href="../ir_remote.html#ir_remote.IRreceiver">[docs]</a><span class="k">class</span> <span class="nc">IRreceiver</span><span class="p">:</span>
-<div class="viewcode-block" id="IRreceiver.ir_receive"><a class="viewcode-back" href="../ir_remote.html#ir_remote.IRreceiver.ir_receive">[docs]</a>    <span class="nd">@rp2</span><span class="o">.</span><span class="n">asm_pio</span><span class="p">(</span><span class="n">in_shiftdir</span><span class="o">=</span><span class="n">rp2</span><span class="o">.</span><span class="n">PIO</span><span class="o">.</span><span class="n">SHIFT_RIGHT</span><span class="p">,</span> <span class="n">autopush</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<div class="viewcode-block" id="IRreceiver"><a class="viewcode-back" href="../modules/ir_remote.html#ir_remote.IRreceiver">[docs]</a><span class="k">class</span> <span class="nc">IRreceiver</span><span class="p">:</span>
+<div class="viewcode-block" id="IRreceiver.ir_receive"><a class="viewcode-back" href="../modules/ir_remote.html#ir_remote.IRreceiver.ir_receive">[docs]</a>    <span class="nd">@rp2</span><span class="o">.</span><span class="n">asm_pio</span><span class="p">(</span><span class="n">in_shiftdir</span><span class="o">=</span><span class="n">rp2</span><span class="o">.</span><span class="n">PIO</span><span class="o">.</span><span class="n">SHIFT_RIGHT</span><span class="p">,</span> <span class="n">autopush</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                  <span class="n">push_thresh</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">ir_receive</span><span class="p">(</span><span class="n">BURST_LOOP_COUNTER</span><span class="o">=</span><span class="n">BURST_LOOP_COUNTER</span><span class="p">,</span>
                    <span class="n">BIT_SAMPLE_DELAY</span><span class="o">=</span><span class="n">BIT_SAMPLE_DELAY</span><span class="p">):</span>
@@ -166,10 +167,10 @@
                                    <span class="n">jmp_pin</span><span class="o">=</span><span class="n">ir</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sm</span><span class="o">.</span><span class="n">active</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
-<div class="viewcode-block" id="IRreceiver.key_available"><a class="viewcode-back" href="../ir_remote.html#ir_remote.IRreceiver.key_available">[docs]</a>    <span class="k">def</span> <span class="nf">key_available</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="IRreceiver.key_available"><a class="viewcode-back" href="../modules/ir_remote.html#ir_remote.IRreceiver.key_available">[docs]</a>    <span class="k">def</span> <span class="nf">key_available</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sm</span><span class="o">.</span><span class="n">rx_fifo</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span></div>
 
-<div class="viewcode-block" id="IRreceiver.get_key"><a class="viewcode-back" href="../ir_remote.html#ir_remote.IRreceiver.get_key">[docs]</a>    <span class="k">def</span> <span class="nf">get_key</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="IRreceiver.get_key"><a class="viewcode-back" href="../modules/ir_remote.html#ir_remote.IRreceiver.get_key">[docs]</a>    <span class="k">def</span> <span class="nf">get_key</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sm</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">data</span> <span class="o">&amp;</span> <span class="mh">0x00ff0000</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">16</span></div></div>
 </pre></div>

@@ -13,6 +13,7 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" /> 
@@ -70,7 +71,10 @@
 <span class="kn">import</span> <span class="nn">time</span>
 
 
-<div class="viewcode-block" id="Drive"><a class="viewcode-back" href="../components.html#components.Drive">[docs]</a><span class="k">class</span> <span class="nc">Drive</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="Drive"><a class="viewcode-back" href="../modules/components.html#components.Drive">[docs]</a><span class="k">class</span> <span class="nc">Drive</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The drive object combines the two motors into one functionality for</span>
+<span class="sd">    driving the robot.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">PWMA</span> <span class="o">=</span> <span class="n">PWM</span><span class="p">(</span><span class="n">Pin</span><span class="p">(</span><span class="mi">16</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">PWMA</span><span class="o">.</span><span class="n">freq</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
@@ -82,8 +86,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">PWMB</span><span class="o">.</span><span class="n">freq</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
 
-<div class="viewcode-block" id="Drive.forward"><a class="viewcode-back" href="../components.html#components.Drive.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">speed</span><span class="p">):</span>
-        <span class="k">if</span> <span class="p">((</span><span class="n">speed</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">speed</span> <span class="o">&lt;=</span> <span class="mi">100</span><span class="p">)):</span>
+<div class="viewcode-block" id="Drive.forward"><a class="viewcode-back" href="../modules/components.html#components.Drive.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">speed</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Turn the motors on for forward motion. The speed is given in</span>
+<span class="sd">        percent with 100% being the maximum forward speed equal to 100% PWM</span>
+<span class="sd">        cycle.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">speed</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">speed</span> <span class="o">&lt;=</span> <span class="mi">100</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">PWMA</span><span class="o">.</span><span class="n">duty_u16</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">speed</span><span class="o">*</span><span class="mh">0xFFFF</span><span class="o">/</span><span class="mi">100</span><span class="p">))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">PWMB</span><span class="o">.</span><span class="n">duty_u16</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">speed</span><span class="o">*</span><span class="mh">0xFFFF</span><span class="o">/</span><span class="mi">100</span><span class="p">))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">AIN2</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
@@ -91,8 +98,11 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">BIN2</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">BIN1</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Drive.backward"><a class="viewcode-back" href="../components.html#components.Drive.backward">[docs]</a>    <span class="k">def</span> <span class="nf">backward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">speed</span><span class="p">):</span>
-        <span class="k">if</span> <span class="p">((</span><span class="n">speed</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">speed</span> <span class="o">&lt;=</span> <span class="mi">100</span><span class="p">)):</span>
+<div class="viewcode-block" id="Drive.backward"><a class="viewcode-back" href="../modules/components.html#components.Drive.backward">[docs]</a>    <span class="k">def</span> <span class="nf">backward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">speed</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Turn the motors on for backward motion. The speed is given in</span>
+<span class="sd">        percent with 100% being the maximum backward speed equal to 100% PWM</span>
+<span class="sd">        cycle.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">speed</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">speed</span> <span class="o">&lt;=</span> <span class="mi">100</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">PWMA</span><span class="o">.</span><span class="n">duty_u16</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">speed</span><span class="o">*</span><span class="mh">0xFFFF</span><span class="o">/</span><span class="mi">100</span><span class="p">))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">PWMB</span><span class="o">.</span><span class="n">duty_u16</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">speed</span><span class="o">*</span><span class="mh">0xFFFF</span><span class="o">/</span><span class="mi">100</span><span class="p">))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">AIN2</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
@@ -100,8 +110,9 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">BIN2</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">BIN1</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Drive.left"><a class="viewcode-back" href="../components.html#components.Drive.left">[docs]</a>    <span class="k">def</span> <span class="nf">left</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">speed</span><span class="p">):</span>
-        <span class="k">if</span> <span class="p">((</span><span class="n">speed</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">speed</span> <span class="o">&lt;=</span> <span class="mi">100</span><span class="p">)):</span>
+<div class="viewcode-block" id="Drive.left"><a class="viewcode-back" href="../modules/components.html#components.Drive.left">[docs]</a>    <span class="k">def</span> <span class="nf">left</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">speed</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Turn the robot left with the given speed.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">speed</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">speed</span> <span class="o">&lt;=</span> <span class="mi">100</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">PWMA</span><span class="o">.</span><span class="n">duty_u16</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">speed</span><span class="o">*</span><span class="mh">0xFFFF</span><span class="o">/</span><span class="mi">100</span><span class="p">))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">PWMB</span><span class="o">.</span><span class="n">duty_u16</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">speed</span><span class="o">*</span><span class="mh">0xFFFF</span><span class="o">/</span><span class="mi">100</span><span class="p">))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">AIN2</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
@@ -109,8 +120,9 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">BIN2</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">BIN1</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Drive.right"><a class="viewcode-back" href="../components.html#components.Drive.right">[docs]</a>    <span class="k">def</span> <span class="nf">right</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">speed</span><span class="p">):</span>
-        <span class="k">if</span> <span class="p">((</span><span class="n">speed</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">speed</span> <span class="o">&lt;=</span> <span class="mi">100</span><span class="p">)):</span>
+<div class="viewcode-block" id="Drive.right"><a class="viewcode-back" href="../modules/components.html#components.Drive.right">[docs]</a>    <span class="k">def</span> <span class="nf">right</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">speed</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Turn the robot right with the given speed.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">speed</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">speed</span> <span class="o">&lt;=</span> <span class="mi">100</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">PWMA</span><span class="o">.</span><span class="n">duty_u16</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">speed</span><span class="o">*</span><span class="mh">0xFFFF</span><span class="o">/</span><span class="mi">100</span><span class="p">))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">PWMB</span><span class="o">.</span><span class="n">duty_u16</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">speed</span><span class="o">*</span><span class="mh">0xFFFF</span><span class="o">/</span><span class="mi">100</span><span class="p">))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">AIN2</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
@@ -118,7 +130,8 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">BIN2</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">BIN1</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Drive.stop"><a class="viewcode-back" href="../components.html#components.Drive.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Drive.stop"><a class="viewcode-back" href="../modules/components.html#components.Drive.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Stop all motors.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">PWMA</span><span class="o">.</span><span class="n">duty_u16</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">PWMB</span><span class="o">.</span><span class="n">duty_u16</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">AIN2</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
@@ -126,42 +139,48 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">BIN2</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">BIN1</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Drive.setMotor"><a class="viewcode-back" href="../components.html#components.Drive.setMotor">[docs]</a>    <span class="k">def</span> <span class="nf">setMotor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">):</span>
-        <span class="k">if</span> <span class="p">((</span><span class="n">left</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">left</span> <span class="o">&lt;=</span> <span class="mi">100</span><span class="p">)):</span>
+<div class="viewcode-block" id="Drive.set_motor"><a class="viewcode-back" href="../modules/components.html#components.Drive.set_motor">[docs]</a>    <span class="k">def</span> <span class="nf">set_motor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the motor speeds for the left and right motors individually</span>
+<span class="sd">        simultaneously. The parameters ``left`` and ``right`` give the PWM</span>
+<span class="sd">        percentages of the respective motors. Positive percentages will move</span>
+<span class="sd">        the motors forward, while negative percentages will move the</span>
+<span class="sd">        backwards.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">left</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">left</span> <span class="o">&lt;=</span> <span class="mi">100</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">AIN1</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">AIN2</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">PWMA</span><span class="o">.</span><span class="n">duty_u16</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">left</span><span class="o">*</span><span class="mh">0xFFFF</span><span class="o">/</span><span class="mi">100</span><span class="p">))</span>
-        <span class="k">elif</span> <span class="p">((</span><span class="n">left</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">left</span> <span class="o">&gt;=</span> <span class="o">-</span><span class="mi">100</span><span class="p">)):</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="n">left</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">left</span> <span class="o">&gt;=</span> <span class="o">-</span><span class="mi">100</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">AIN1</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">AIN2</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">PWMA</span><span class="o">.</span><span class="n">duty_u16</span><span class="p">(</span><span class="o">-</span><span class="nb">int</span><span class="p">(</span><span class="n">left</span><span class="o">*</span><span class="mh">0xFFFF</span><span class="o">/</span><span class="mi">100</span><span class="p">))</span>
-        <span class="k">if</span> <span class="p">((</span><span class="n">right</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">right</span> <span class="o">&lt;=</span> <span class="mi">100</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">right</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">right</span> <span class="o">&lt;=</span> <span class="mi">100</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">BIN2</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">BIN1</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">PWMB</span><span class="o">.</span><span class="n">duty_u16</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">right</span><span class="o">*</span><span class="mh">0xFFFF</span><span class="o">/</span><span class="mi">100</span><span class="p">))</span>
-        <span class="k">elif</span> <span class="p">((</span><span class="n">right</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">right</span> <span class="o">&gt;=</span> <span class="o">-</span><span class="mi">100</span><span class="p">)):</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="n">right</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">right</span> <span class="o">&gt;=</span> <span class="o">-</span><span class="mi">100</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">BIN2</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">BIN1</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">PWMB</span><span class="o">.</span><span class="n">duty_u16</span><span class="p">(</span><span class="o">-</span><span class="nb">int</span><span class="p">(</span><span class="n">right</span><span class="o">*</span><span class="mh">0xFFFF</span><span class="o">/</span><span class="mi">100</span><span class="p">))</span></div></div>
 
 
-<div class="viewcode-block" id="System"><a class="viewcode-back" href="../components.html#components.System">[docs]</a><span class="k">class</span> <span class="nc">System</span><span class="p">:</span>
+<div class="viewcode-block" id="System"><a class="viewcode-back" href="../modules/components.html#components.System">[docs]</a><span class="k">class</span> <span class="nc">System</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;A collection of several generic system functions.&quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bat_adc</span> <span class="o">=</span> <span class="n">ADC</span><span class="p">(</span><span class="n">Pin</span><span class="p">(</span><span class="mi">26</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">temp_adc</span> <span class="o">=</span> <span class="n">ADC</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
 
-<div class="viewcode-block" id="System.temperature"><a class="viewcode-back" href="../components.html#components.System.temperature">[docs]</a>    <span class="k">def</span> <span class="nf">temperature</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="System.temperature"><a class="viewcode-back" href="../modules/components.html#components.System.temperature">[docs]</a>    <span class="k">def</span> <span class="nf">temperature</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns the current Pico-Core temperature in degree celsius&quot;&quot;&quot;</span>
         <span class="n">reading</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">temp_adc</span><span class="o">.</span><span class="n">read_u16</span><span class="p">()</span> <span class="o">*</span> <span class="mf">3.3</span> <span class="o">/</span> <span class="mi">65535</span>
         <span class="n">t</span> <span class="o">=</span> <span class="mi">27</span> <span class="o">-</span> <span class="p">(</span><span class="n">reading</span> <span class="o">-</span> <span class="mf">0.706</span><span class="p">)</span> <span class="o">/</span> <span class="mf">0.001721</span>
         <span class="k">return</span> <span class="n">t</span></div>
 
-<div class="viewcode-block" id="System.battery_voltage"><a class="viewcode-back" href="../components.html#components.System.battery_voltage">[docs]</a>    <span class="k">def</span> <span class="nf">battery_voltage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="System.battery_voltage"><a class="viewcode-back" href="../modules/components.html#components.System.battery_voltage">[docs]</a>    <span class="k">def</span> <span class="nf">battery_voltage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns the current battery voltage in V&quot;&quot;&quot;</span>
         <span class="n">voltage</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bat_adc</span><span class="o">.</span><span class="n">read_u16</span><span class="p">()</span> <span class="o">*</span> <span class="mf">3.3</span> <span class="o">/</span> <span class="mi">65535</span> <span class="o">*</span> <span class="mi">2</span>
         <span class="k">return</span> <span class="n">voltage</span></div>
 
-<div class="viewcode-block" id="System.battery_percentage"><a class="viewcode-back" href="../components.html#components.System.battery_percentage">[docs]</a>    <span class="k">def</span> <span class="nf">battery_percentage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="System.battery_percentage"><a class="viewcode-back" href="../modules/components.html#components.System.battery_percentage">[docs]</a>    <span class="k">def</span> <span class="nf">battery_percentage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns the current battery charge in percent&quot;&quot;&quot;</span>
         <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">battery_voltage</span><span class="p">()</span>
         <span class="n">percentage</span> <span class="o">=</span> <span class="p">(</span><span class="n">v</span> <span class="o">-</span> <span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span> <span class="o">/</span> <span class="mf">1.2</span>
@@ -172,11 +191,13 @@
         <span class="k">return</span> <span class="n">percentage</span></div></div>
 
 
-<div class="viewcode-block" id="Buzzer"><a class="viewcode-back" href="../components.html#components.Buzzer">[docs]</a><span class="k">class</span> <span class="nc">Buzzer</span><span class="p">:</span>
+<div class="viewcode-block" id="Buzzer"><a class="viewcode-back" href="../modules/components.html#components.Buzzer">[docs]</a><span class="k">class</span> <span class="nc">Buzzer</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Represents the original PicoGo beeper.&quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">BUZZER</span> <span class="o">=</span> <span class="n">Pin</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">Pin</span><span class="o">.</span><span class="n">OUT</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Buzzer.beep"><a class="viewcode-back" href="../components.html#components.Buzzer.beep">[docs]</a>    <span class="k">def</span> <span class="nf">beep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_ms</span><span class="o">=</span><span class="mi">150</span><span class="p">):</span>
+<div class="viewcode-block" id="Buzzer.beep"><a class="viewcode-back" href="../modules/components.html#components.Buzzer.beep">[docs]</a>    <span class="k">def</span> <span class="nf">beep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_ms</span><span class="o">=</span><span class="mi">150</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Sound the beeper for the given amount of milliseconds.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">BUZZER</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">time</span><span class="o">.</span><span class="n">sleep_ms</span><span class="p">(</span><span class="n">time_ms</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">BUZZER</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></div></div>

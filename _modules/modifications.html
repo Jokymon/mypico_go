@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Overview: module code &mdash; PicoGo MyBot 0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <title>modifications &mdash; PicoGo MyBot 0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
@@ -56,7 +56,8 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Overview: module code</li>
+          <li><a href="index.html">Module code</a> &raquo;</li>
+      <li>modifications</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -65,15 +66,27 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>All modules for which code is available</h1>
-<ul><li><a href="components.html">components</a></li>
-<li><a href="display.html">display</a></li>
-<li><a href="ir_remote.html">ir_remote</a></li>
-<li><a href="menu.html">menu</a></li>
-<li><a href="modifications.html">modifications</a></li>
-<li><a href="obstacle.html">obstacle</a></li>
-<li><a href="tracking.html">tracking</a></li>
-</ul>
+  <h1>Source code for modifications</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;This module contains implementations for robot modifications. Before using</span>
+<span class="sd">any of them, make sure to check the &quot;Modifications&quot; chapter for what kind of</span>
+<span class="sd">changes need to be made on the robot.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">machine</span> <span class="kn">import</span> <span class="n">Pin</span><span class="p">,</span> <span class="n">PWM</span>
+
+
+<div class="viewcode-block" id="Buzzer"><a class="viewcode-back" href="../modules/modifications.html#modifications.Buzzer">[docs]</a><span class="k">class</span> <span class="nc">Buzzer</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;A buzzer class to implement sound output using a passive buzzer.&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">buzzer</span> <span class="o">=</span> <span class="n">PWM</span><span class="p">(</span><span class="n">Pin</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span>
+
+<div class="viewcode-block" id="Buzzer.play_tone"><a class="viewcode-back" href="../modules/modifications.html#modifications.Buzzer.play_tone">[docs]</a>    <span class="k">def</span> <span class="nf">play_tone</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frequency</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Play a tone of the given frequency in Hz.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">buzzer</span><span class="o">.</span><span class="n">duty_u16</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">buzzer</span><span class="o">.</span><span class="n">freq</span><span class="p">(</span><span class="n">frequency</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Buzzer.be_quiet"><a class="viewcode-back" href="../modules/modifications.html#modifications.Buzzer.be_quiet">[docs]</a>    <span class="k">def</span> <span class="nf">be_quiet</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">buzzer</span><span class="o">.</span><span class="n">duty_u16</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></div></div>
+</pre></div>
 
            </div>
           </div>

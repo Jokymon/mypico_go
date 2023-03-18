@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ir_remote module &mdash; PicoGo MyBot 0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="menu module" href="menu.html" />
+    <link rel="prev" title="display module" href="display.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> PicoGo MyBot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../hardware.html">PicoGo Hardware</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">mybot</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="components.html">components module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="display.html">display module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">ir_remote module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="menu.html">menu module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modifications.html">modifications module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="obstacle.html">obstacle module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tracking.html">tracking module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../knowhow/index.html">Know-how</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modifications.html">Modifications</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PicoGo MyBot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../modules.html">mybot</a> &raquo;</li>
+      <li>ir_remote module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/modules/ir_remote.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="module-ir_remote">
+<span id="ir-remote-module"></span><h1>ir_remote module<a class="headerlink" href="#module-ir_remote" title="Permalink to this headline">¶</a></h1>
+<p>This code is ported from <a class="reference external" href="https://github.com/raspberrypi/pico-examples/blob/master/pio/ir_nec/nec_receive_library/nec_receive.pio">https://github.com/raspberrypi/pico-examples/blob/master/pio/ir_nec/nec_receive_library/nec_receive.pio</a></p>
+<p>Decode IR frames in NEC format and push 32-bit words to the input FIFO.</p>
+<p>The input pin should be connected to an IR detector with an ‘active low’
+output.</p>
+<p>This program expects there to be 10 state machine clock ticks per ‘normal’
+562.5us burst period in order to permit timely detection of start of a burst.
+The initailisation function below sets the correct divisor to achive this
+relative to the system clock.</p>
+<p>Within the ‘NEC’ protocol frames consists of 32 bits sent least-siginificant
+bit first; so the Input Shift Register should be configured to shift right
+and autopush after 32 bits, as in the initialisation function below.</p>
+<p>IR codes can be extracted from the sm RX fifo. Values might look like this:
+<code class="docutils literal notranslate"><span class="pre">0xa15eff00</span></code></p>
+<p>The first byte 0xa1 is the inverse of the following code 0x5e and 0xff, the
+inverse of 0x00 is a form of control code. The second byte, here 0x5e,
+represents the received key code.</p>
+<dl class="class">
+<dt id="ir_remote.IRreceiver">
+<em class="property">class </em><code class="sig-prename descclassname">ir_remote.</code><code class="sig-name descname">IRreceiver</code><a class="reference internal" href="../_modules/ir_remote.html#IRreceiver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ir_remote.IRreceiver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="ir_remote.IRreceiver.get_key">
+<code class="sig-name descname">get_key</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ir_remote.html#IRreceiver.get_key"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ir_remote.IRreceiver.get_key" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ir_remote.IRreceiver.ir_receive">
+<code class="sig-name descname">ir_receive</code><span class="sig-paren">(</span><em class="sig-param">BIT_SAMPLE_DELAY=15</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ir_remote.html#IRreceiver.ir_receive"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ir_remote.IRreceiver.ir_receive" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ir_remote.IRreceiver.key_available">
+<code class="sig-name descname">key_available</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ir_remote.html#IRreceiver.key_available"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ir_remote.IRreceiver.key_available" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ir_remote.Keys">
+<em class="property">class </em><code class="sig-prename descclassname">ir_remote.</code><code class="sig-name descname">Keys</code><a class="reference internal" href="../_modules/ir_remote.html#Keys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ir_remote.Keys" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="attribute">
+<dt id="ir_remote.Keys.KEY_0">
+<code class="sig-name descname">KEY_0</code><em class="property"> = 22</em><a class="headerlink" href="#ir_remote.Keys.KEY_0" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ir_remote.Keys.KEY_1">
+<code class="sig-name descname">KEY_1</code><em class="property"> = 12</em><a class="headerlink" href="#ir_remote.Keys.KEY_1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ir_remote.Keys.KEY_100_P">
+<code class="sig-name descname">KEY_100_P</code><em class="property"> = 25</em><a class="headerlink" href="#ir_remote.Keys.KEY_100_P" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ir_remote.Keys.KEY_2">
+<code class="sig-name descname">KEY_2</code><em class="property"> = 24</em><a class="headerlink" href="#ir_remote.Keys.KEY_2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ir_remote.Keys.KEY_200_P">
+<code class="sig-name descname">KEY_200_P</code><em class="property"> = 13</em><a class="headerlink" href="#ir_remote.Keys.KEY_200_P" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ir_remote.Keys.KEY_3">
+<code class="sig-name descname">KEY_3</code><em class="property"> = 94</em><a class="headerlink" href="#ir_remote.Keys.KEY_3" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ir_remote.Keys.KEY_4">
+<code class="sig-name descname">KEY_4</code><em class="property"> = 8</em><a class="headerlink" href="#ir_remote.Keys.KEY_4" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ir_remote.Keys.KEY_5">
+<code class="sig-name descname">KEY_5</code><em class="property"> = 28</em><a class="headerlink" href="#ir_remote.Keys.KEY_5" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ir_remote.Keys.KEY_6">
+<code class="sig-name descname">KEY_6</code><em class="property"> = 90</em><a class="headerlink" href="#ir_remote.Keys.KEY_6" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ir_remote.Keys.KEY_7">
+<code class="sig-name descname">KEY_7</code><em class="property"> = 66</em><a class="headerlink" href="#ir_remote.Keys.KEY_7" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ir_remote.Keys.KEY_8">
+<code class="sig-name descname">KEY_8</code><em class="property"> = 82</em><a class="headerlink" href="#ir_remote.Keys.KEY_8" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ir_remote.Keys.KEY_9">
+<code class="sig-name descname">KEY_9</code><em class="property"> = 74</em><a class="headerlink" href="#ir_remote.Keys.KEY_9" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ir_remote.Keys.KEY_CH">
+<code class="sig-name descname">KEY_CH</code><em class="property"> = 70</em><a class="headerlink" href="#ir_remote.Keys.KEY_CH" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ir_remote.Keys.KEY_CH_M">
+<code class="sig-name descname">KEY_CH_M</code><em class="property"> = 69</em><a class="headerlink" href="#ir_remote.Keys.KEY_CH_M" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ir_remote.Keys.KEY_CH_P">
+<code class="sig-name descname">KEY_CH_P</code><em class="property"> = 71</em><a class="headerlink" href="#ir_remote.Keys.KEY_CH_P" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ir_remote.Keys.KEY_EQ">
+<code class="sig-name descname">KEY_EQ</code><em class="property"> = 9</em><a class="headerlink" href="#ir_remote.Keys.KEY_EQ" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ir_remote.Keys.KEY_MINUS">
+<code class="sig-name descname">KEY_MINUS</code><em class="property"> = 7</em><a class="headerlink" href="#ir_remote.Keys.KEY_MINUS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ir_remote.Keys.KEY_NEXT">
+<code class="sig-name descname">KEY_NEXT</code><em class="property"> = 64</em><a class="headerlink" href="#ir_remote.Keys.KEY_NEXT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ir_remote.Keys.KEY_PLAY">
+<code class="sig-name descname">KEY_PLAY</code><em class="property"> = 67</em><a class="headerlink" href="#ir_remote.Keys.KEY_PLAY" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ir_remote.Keys.KEY_PLUS">
+<code class="sig-name descname">KEY_PLUS</code><em class="property"> = 21</em><a class="headerlink" href="#ir_remote.Keys.KEY_PLUS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ir_remote.Keys.KEY_PREV">
+<code class="sig-name descname">KEY_PREV</code><em class="property"> = 68</em><a class="headerlink" href="#ir_remote.Keys.KEY_PREV" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ir_remote.Keys.NUMBER_KEYS">
+<code class="sig-name descname">NUMBER_KEYS</code><em class="property"> = [22, 12, 24, 94, 8, 28, 90, 66, 82, 74]</em><a class="headerlink" href="#ir_remote.Keys.NUMBER_KEYS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ir_remote.Keys.is_number">
+<code class="sig-name descname">is_number</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ir_remote.html#Keys.is_number"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ir_remote.Keys.is_number" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="display.html" class="btn btn-neutral float-left" title="display module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="menu.html" class="btn btn-neutral float-right" title="menu module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Silvan Wegmann.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

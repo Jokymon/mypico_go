@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tracking module &mdash; PicoGo MyBot 0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Know-how" href="../knowhow/index.html" />
+    <link rel="prev" title="obstacle module" href="obstacle.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> PicoGo MyBot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../hardware.html">PicoGo Hardware</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">mybot</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="components.html">components module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="display.html">display module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ir_remote.html">ir_remote module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="menu.html">menu module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modifications.html">modifications module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="obstacle.html">obstacle module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">tracking module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../knowhow/index.html">Know-how</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modifications.html">Modifications</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PicoGo MyBot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../modules.html">mybot</a> &raquo;</li>
+      <li>tracking module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/modules/tracking.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="module-tracking">
+<span id="tracking-module"></span><h1>tracking module<a class="headerlink" href="#module-tracking" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="tracking.ADS1015">
+<em class="property">class </em><code class="sig-prename descclassname">tracking.</code><code class="sig-name descname">ADS1015</code><span class="sig-paren">(</span><em class="sig-param">i2c_bus=1</em>, <em class="sig-param">addr=72</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tracking.html#ADS1015"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tracking.ADS1015" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Encapsulation of the external AD converter ADS1015.</p>
+<dl class="method">
+<dt id="tracking.ADS1015.read_u16">
+<code class="sig-name descname">read_u16</code><span class="sig-paren">(</span><em class="sig-param">channel</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tracking.html#ADS1015.read_u16"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tracking.ADS1015.read_u16" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a 16-bit ADC value from the previously set channel.</p>
+<p>The values read from the ADC are normalized to a full-range
+16-bit value.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="tracking.ADS1015.set_channel">
+<code class="sig-name descname">set_channel</code><span class="sig-paren">(</span><em class="sig-param">channel</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tracking.html#ADS1015.set_channel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tracking.ADS1015.set_channel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configure the ADC to read a single value from the specified
+channel.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="tracking.LineSensor">
+<em class="property">class </em><code class="sig-prename descclassname">tracking.</code><code class="sig-name descname">LineSensor</code><a class="reference internal" href="../_modules/tracking.html#LineSensor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tracking.LineSensor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="tracking.LineSensor.analog_read">
+<code class="sig-name descname">analog_read</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tracking.html#LineSensor.analog_read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tracking.LineSensor.analog_read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read the sensor values from all five line tracking sensors and
+return them in an array.</p>
+<p>The read values are normalized to the range 0 - 1024.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="tracking.LineSensor.calibration_cycle">
+<code class="sig-name descname">calibration_cycle</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tracking.html#LineSensor.calibration_cycle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tracking.LineSensor.calibration_cycle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read all line sensor values once and adjust the calibration range
+for the individual sensor channels. Once sufficient cycles have been
+run, <a class="reference internal" href="#tracking.LineSensor.read_calibrated" title="tracking.LineSensor.read_calibrated"><code class="xref py py-meth docutils literal notranslate"><span class="pre">tracking.LineSensor.read_calibrated()</span></code></a> will return a
+normalized measurement based on the minima and maxima measurements.</p>
+<p>For the calibration it is recommended to run multiple calibration
+cycles while the robot is moved over the bright and dark undergrounds.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="tracking.LineSensor.read_calibrated">
+<code class="sig-name descname">read_calibrated</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tracking.html#LineSensor.read_calibrated"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tracking.LineSensor.read_calibrated" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return values calibrated to a value between 0 and 1000, where
+0 corresponds to the minimum value calculated by
+<a class="reference internal" href="#tracking.LineSensor.calibration_cycle" title="tracking.LineSensor.calibration_cycle"><code class="xref py py-meth docutils literal notranslate"><span class="pre">tracking.LineSensor.calibration_cycle()</span></code></a>
+and 1000 corresponding to the maximum value.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="tracking.LineSensor.read_line">
+<code class="sig-name descname">read_line</code><span class="sig-paren">(</span><em class="sig-param">white_line=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tracking.html#LineSensor.read_line"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tracking.LineSensor.read_line" title="Permalink to this definition">¶</a></dt>
+<dd><p>Operates the same as read calibrated, but also returns an
+estimated position of the robot with respect to a line. The
+estimate is made using a weighted average of the sensor indices
+multiplied by 1000, so that a return value of 0 indicates that
+the line is directly below sensor 0, a return value of 1000
+indicates that the line is directly below sensor 1, 2000
+indicates that it’s below sensor 2000, etc.  Intermediate
+values indicate that the line is between two sensors.  The
+formula is:</p>
+<div class="math notranslate nohighlight">
+\[\frac{0 \cdot value0 + 1000 \cdot value1 + 2000 \cdot
+    value2 + \dotso}
+{value0  +  value1  +  value2 + \dotso}\]</div>
+<p>By default, this function assumes a dark line (high values)
+surrounded by white (low values).  If your line is light on
+black, set the optional second argument white_line to true.  In
+this case, each sensor value will be replaced by (1000-value)
+before the averaging.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="tracking.LineSensor.reset_calibration">
+<code class="sig-name descname">reset_calibration</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tracking.html#LineSensor.reset_calibration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tracking.LineSensor.reset_calibration" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="tracking.calib">
+<code class="sig-prename descclassname">tracking.</code><code class="sig-name descname">calib</code><span class="sig-paren">(</span><em class="sig-param">line_sensor</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tracking.html#calib"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tracking.calib" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run multiple calibration cycles on the given
+<a class="reference internal" href="#tracking.LineSensor" title="tracking.LineSensor"><code class="xref py py-class docutils literal notranslate"><span class="pre">tracking.LineSensor</span></code></a> instance. The cycles are run with a 500ms
+pause between them. They are run in an infinite loop and need to be
+stopped with Ctrl-C.</p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="obstacle.html" class="btn btn-neutral float-left" title="obstacle module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../knowhow/index.html" class="btn btn-neutral float-right" title="Know-how" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Silvan Wegmann.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
